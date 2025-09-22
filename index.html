@@ -1,0 +1,329 @@
+    <meta property="og:title" content="Open Session">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --text-primary: #ffffff;
+            --text-secondary: #999999;
+            --bg-dark: #1a1a1a;
+            --bg-darker: #0f0f0f;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --cream: #f5f0e6;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Header Background Image */
+        .header-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            z-index: 0;
+            background-image: url('OS_brand_medium_profile_cover.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.4;
+        }
+
+        .header-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(180deg, 
+                rgba(26, 26, 26, 0) 0%, 
+                rgba(26, 26, 26, 0.7) 60%, 
+                rgba(26, 26, 26, 1) 100%);
+            z-index: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            text-align: center;
+            padding-top: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 2rem;
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--bg-darker);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .profile-tagline {
+            font-size: 1.125rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Contact Section */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        /* Links Container */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .link-item {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1.25rem 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item:hover {
+            background: var(--bg-card);
+            border-color: #444;
+        }
+
+        .link-icon-wrapper {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .link-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            filter: invert(93%) sepia(8%) saturate(266%) hue-rotate(23deg) brightness(104%) contrast(96%);
+        }
+
+        .link-text {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0 3rem;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 640px) {
+            .header-background {
+                height: 200px;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .profile-section {
+                padding-top: 60px;
+            }
+
+            .profile-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile-name {
+                font-size: 2rem;
+            }
+
+            .profile-tagline {
+                font-size: 1rem;
+            }
+
+            .profile-description {
+                font-size: 0.9rem;
+            }
+
+            .link-item {
+                padding: 1.1rem 1.25rem;
+            }
+
+            .link-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Background -->
+    <div class="header-background"></div>
+    <div class="header-gradient"></div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-image">
+                <img src="3D_Logo_rotation__1_.gif" alt="Open Session Logo">
+            </div>
+            <h1 class="profile-name">Open Session</h1>
+            <p class="profile-tagline">Your design workflow, upgraded.</p>
+            <p class="profile-description">Figma templates, AI workflows, and the latest designer insights</p>
+        </div>
+
+        <!-- Contact Section -->
+        <h2 class="section-title">Contact</h2>
+        
+        <!-- Links -->
+        <div class="links-container">
+            <!-- Website -->
+            <a href="https://open-session.link/website-social" target="_blank" rel="noopener noreferrer" class="link-item">
+                <div class="link-icon-wrapper">
+                    <img src="Linkree_website_thumbnails.png" alt="Website" class="link-icon">
+                </div>
+                <span class="link-text">Website</span>
+            </a>
+
+            <!-- YouTube -->
+            <a href="https://open-session.link/youtube-social" target="_blank" rel="noopener noreferrer" class="link-item">
+                <div class="link-icon-wrapper">
+                    <img src="Linkree_youtube_thumbnails.png" alt="YouTube" class="link-icon">
+                </div>
+                <span class="link-text">YouTube</span>
+            </a>
+
+            <!-- Medium -->
+            <a href="https://open-session.link/medium-social" target="_blank" rel="noopener noreferrer" class="link-item">
+                <div class="link-icon-wrapper">
+                    <img src="Linkree_medium_thumbnails.png" alt="Medium" class="link-icon">
+                </div>
+                <span class="link-text">Medium</span>
+            </a>
+
+            <!-- Substack -->
+            <a href="https://open-session.link/substack-social" target="_blank" rel="noopener noreferrer" class="link-item">
+                <div class="link-icon-wrapper">
+                    <img src="Linkree_substack_thumbnails.png" alt="Substack" class="link-icon">
+                </div>
+                <span class="link-text">Substack</span>
+            </a>
+
+            <!-- Figma -->
+            <a href="https://open-session.link/figma-social" target="_blank" rel="noopener noreferrer" class="link-item">
+                <div class="link-icon-wrapper">
+                    <img src="Linkree_figma_thumbnails.png" alt="Figma" class="link-icon">
+                </div>
+                <span class="link-text">Figma</span>
+            </a>
+
+            <!-- LinkedIn -->
+            <a href="https://open-session.link/linkedin-social" target="_blank" rel="noopener noreferrer" class="link-item">
+                <div class="link-icon-wrapper">
+                    <img src="Linkree_linkedin_thumbnails.png" alt="LinkedIn" class="link-icon">
+                </div>
+                <span class="link-text">LinkedIn</span>
+            </a>
+
+            <!-- Instagram -->
+            <a href="https://open-session.link/instagram-social" target="_blank" rel="noopener noreferrer" class="link-item">
+                <div class="link-icon-wrapper">
+                    <img src="Linkree_instagram_thumbnails.png" alt="Instagram" class="link-icon">
+                </div>
+                <span class="link-text">Instagram</span>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">© 2024 Open Session</p>
+        </div>
+    </div>
+
+    <script>
+        // Simple fade-in animation on load
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Optional: Track link clicks for analytics
+        document.querySelectorAll('.link-item').forEach(link => {
+            link.addEventListener('click', function() {
+                const linkText = this.querySelector('.link-text').textContent;
+                console.log(`Clicked: ${linkText}`);
+            });
+        });
+    </script>
+</body>
+</html>
