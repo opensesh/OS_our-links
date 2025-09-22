@@ -1,5 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Open Session - Your design workflow, upgraded. Figma templates, AI workflows, and the latest designer insights">
     <meta property="og:title" content="Open Session">
-    <!-- Google Fonts -->
+    <meta property="og:description" content="Your design workflow, upgraded. Figma templates, AI workflows, and the latest designer insights">
+    <meta property="og:image" content="3D_Logo_rotation__1_.gif">
+    <title>Open Session | Links</title>
+    
+    <!-- Google Fonts (fallbacks) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -10,19 +20,35 @@
         }
 
         :root {
-            --text-primary: #ffffff;
-            --text-secondary: #999999;
-            --bg-dark: #1a1a1a;
-            --bg-darker: #0f0f0f;
-            --bg-card: #2a2a2a;
-            --border-color: #333333;
-            --cream: #f5f0e6;
+            /* Design System */
+            --color-background: #191919; /* Charcoal */
+            --color-text: #FFFAEE;       /* Vanilla */
+            --color-container: #232323;  /* Containers */
+            --color-hover: #2D2D2D;      /* Hover */
+            --color-accent: #FE5102;     /* Aperol */
+
+            --text-secondary: rgba(255, 250, 238, 0.64);
+            --radius: 4px;
+
+            /* Typography (fallbacks until custom font is provided) */
+            --font-display: "Neue Haas Grotesk Display Pro", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            --font-body: "Neue Haas Grotesk Text Pro", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+            /* Spacing */
+            --container-padding-mobile: 16px;
+            --container-padding-desktop: 32px;
+            --gap-mobile: 12px;
+            --gap-desktop: 20px;
+
+            /* Motion */
+            --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+            --duration-fast: 0.2s;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
+            font-family: var(--font-body);
+            background-color: var(--color-background);
+            color: var(--color-text);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -34,13 +60,13 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 250px;
+            height: 240px;
             z-index: 0;
             background-image: url('OS_brand_medium_profile_cover.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0.4;
+            opacity: 0.35;
         }
 
         .header-gradient {
@@ -48,19 +74,24 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 350px;
-            background: linear-gradient(180deg, 
-                rgba(26, 26, 26, 0) 0%, 
-                rgba(26, 26, 26, 0.7) 60%, 
-                rgba(26, 26, 26, 1) 100%);
+            height: 360px;
+            background: linear-gradient(180deg,
+                rgba(25, 25, 25, 0) 0%,
+                rgba(25, 25, 25, 0.6) 55%,
+                rgba(25, 25, 25, 1) 100%);
             z-index: 1;
+        }
+
+        /* Spacer to create header area for overlap */
+        .hero-spacer {
+            height: 200px;
         }
 
         /* Container */
         .container {
             max-width: 680px;
             margin: 0 auto;
-            padding: 0 1.5rem;
+            padding: 0 var(--container-padding-mobile);
             position: relative;
             z-index: 2;
         }
@@ -68,21 +99,23 @@
         /* Profile Section */
         .profile-section {
             text-align: center;
-            padding-top: 80px;
+            padding-top: 0;
             margin-bottom: 2rem;
         }
 
         .profile-image {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 2rem;
-            border-radius: 4px;
+            width: 160px;
+            height: 160px;
+            margin: -80px auto 1.5rem; /* overlap header by 50% */
+            border-radius: var(--radius);
             overflow: hidden;
-            background: var(--bg-darker);
+            background: var(--color-container);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            animation: fadeUp 600ms var(--easing-standard) both;
         }
 
         .profile-image img {
@@ -96,20 +129,17 @@
             font-weight: 700;
             margin-bottom: 0.75rem;
             letter-spacing: -0.02em;
+            font-family: var(--font-display);
+            animation: fadeUp 600ms var(--easing-standard) 60ms both;
         }
 
         .profile-tagline {
-            font-size: 1.125rem;
-            color: var(--text-primary);
+            font-size: 1.0625rem;
+            color: var(--text-secondary);
             line-height: 1.6;
             font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-description {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
+            margin-bottom: 0.75rem;
+            animation: fadeUp 600ms var(--easing-standard) 120ms both;
         }
 
         /* Contact Section */
@@ -118,33 +148,48 @@
             font-weight: 600;
             margin-bottom: 1.5rem;
             margin-top: 3rem;
+            font-family: var(--font-display);
+            animation: fadeUp 600ms var(--easing-standard) 180ms both;
         }
 
         /* Links Container */
         .links-container {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: var(--gap-mobile);
         }
 
         .link-item {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 1.25rem 1.5rem;
+            background: var(--color-container);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius);
+            padding: 1rem 1rem;
             text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.2s ease;
+            color: var(--color-text);
+            transition: background-color var(--duration-fast) var(--easing-standard),
+                        transform var(--duration-fast) var(--easing-standard),
+                        box-shadow var(--duration-fast) var(--easing-standard),
+                        border-color var(--duration-fast) var(--easing-standard);
             display: flex;
             align-items: center;
             gap: 1rem;
             position: relative;
             overflow: hidden;
+            outline: none;
+            will-change: transform;
+            animation: fadeUp 600ms var(--easing-standard) both;
         }
 
         .link-item:hover {
-            background: var(--bg-card);
-            border-color: #444;
+            background: var(--color-hover);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .link-item:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
         }
 
         .link-icon-wrapper {
@@ -156,11 +201,10 @@
             flex-shrink: 0;
         }
 
-        .link-icon {
+        .link-icon svg {
             width: 24px;
             height: 24px;
-            object-fit: contain;
-            filter: invert(93%) sepia(8%) saturate(266%) hue-rotate(23deg) brightness(104%) contrast(96%);
+            display: block;
         }
 
         .link-text {
@@ -181,43 +225,28 @@
             font-size: 0.875rem;
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 640px) {
-            .header-background {
-                height: 200px;
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
             }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
+        /* Responsive adjustments */
+        @media (min-width: 680px) {
             .container {
-                padding: 0 1rem;
+                padding: 0 var(--container-padding-desktop);
             }
-
-            .profile-section {
-                padding-top: 60px;
+            .links-container {
+                gap: var(--gap-desktop);
             }
-
-            .profile-image {
-                width: 120px;
-                height: 120px;
-            }
-
-            .profile-name {
-                font-size: 2rem;
-            }
-
-            .profile-tagline {
-                font-size: 1rem;
-            }
-
-            .profile-description {
-                font-size: 0.9rem;
-            }
-
             .link-item {
-                padding: 1.1rem 1.25rem;
-            }
-
-            .link-text {
-                font-size: 0.95rem;
+                padding: 1.125rem 1.25rem;
             }
         }
     </style>
@@ -228,101 +257,140 @@
     <div class="header-gradient"></div>
     
     <!-- Main Container -->
-    <div class="container">
+    <main id="main-content" class="container" role="main">
+        <div class="hero-spacer" aria-hidden="true"></div>
+
         <!-- Profile Section -->
-        <div class="profile-section">
-            <div class="profile-image">
-                <img src="3D_Logo_rotation__1_.gif" alt="Open Session Logo">
+        <section class="profile-section" aria-label="Profile">
+            <div class="profile-image" aria-hidden="true">
+                <img src="3D_Logo_rotation__1_.gif" alt="Open Session logo">
             </div>
             <h1 class="profile-name">Open Session</h1>
-            <p class="profile-tagline">Your design workflow, upgraded.</p>
-            <p class="profile-description">Figma templates, AI workflows, and the latest designer insights</p>
-        </div>
+            <p class="profile-tagline">Your design workflow, upgraded. Figma templates, AI workflows, and the latest designer insights</p>
+        </section>
 
-        <!-- Contact Section -->
-        <h2 class="section-title">Contact</h2>
-        
-        <!-- Links -->
-        <div class="links-container">
-            <!-- Website -->
-            <a href="https://open-session.link/website-social" target="_blank" rel="noopener noreferrer" class="link-item">
-                <div class="link-icon-wrapper">
-                    <img src="Linkree_website_thumbnails.png" alt="Website" class="link-icon">
-                </div>
-                <span class="link-text">Website</span>
-            </a>
+        <!-- Links Section -->
+        <section aria-labelledby="links-heading">
+            <h2 id="links-heading" class="section-title">Contact</h2>
+            <nav aria-label="Primary links">
+                <div class="links-container">
+                    <!-- 1. Website -->
+                    <a href="https://open-session.link/website-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Website">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M3 12h18M12 3c2.5 2.7 3.75 5.8 3.75 9s-1.25 6.3-3.75 9c-2.5-2.7-3.75-5.8-3.75-9s1.25-6.3 3.75-9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">Website</span>
+                    </a>
 
-            <!-- YouTube -->
-            <a href="https://open-session.link/youtube-social" target="_blank" rel="noopener noreferrer" class="link-item">
-                <div class="link-icon-wrapper">
-                    <img src="Linkree_youtube_thumbnails.png" alt="YouTube" class="link-icon">
-                </div>
-                <span class="link-text">YouTube</span>
-            </a>
+                    <!-- 2. YouTube -->
+                    <a href="https://open-session.link/youtube-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="YouTube">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="6.5" width="18" height="11" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M11 10l4 2-4 2v-4Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">YouTube</span>
+                    </a>
 
-            <!-- Medium -->
-            <a href="https://open-session.link/medium-social" target="_blank" rel="noopener noreferrer" class="link-item">
-                <div class="link-icon-wrapper">
-                    <img src="Linkree_medium_thumbnails.png" alt="Medium" class="link-icon">
-                </div>
-                <span class="link-text">Medium</span>
-            </a>
+                    <!-- 3. Medium -->
+                    <a href="https://open-session.link/medium-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Medium">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M7 16V8h1.2l3 4.6L14.2 8H16v8h-1.3v-5.4L11.2 14h-.4L8.3 10.6V16H7Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">Medium</span>
+                    </a>
 
-            <!-- Substack -->
-            <a href="https://open-session.link/substack-social" target="_blank" rel="noopener noreferrer" class="link-item">
-                <div class="link-icon-wrapper">
-                    <img src="Linkree_substack_thumbnails.png" alt="Substack" class="link-icon">
-                </div>
-                <span class="link-text">Substack</span>
-            </a>
+                    <!-- 4. Substack -->
+                    <a href="https://open-session.link/substack-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Substack">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 6.5h16v2H4z" fill="currentColor"/>
+                                <path d="M4 10h16v2H4z" fill="currentColor"/>
+                                <path d="M6 6.5v10.5l6 3 6-3V6.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">Substack</span>
+                    </a>
 
-            <!-- Figma -->
-            <a href="https://open-session.link/figma-social" target="_blank" rel="noopener noreferrer" class="link-item">
-                <div class="link-icon-wrapper">
-                    <img src="Linkree_figma_thumbnails.png" alt="Figma" class="link-icon">
-                </div>
-                <span class="link-text">Figma</span>
-            </a>
+                    <!-- 5. Figma -->
+                    <a href="https://open-session.link/figma-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Figma">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="10" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M13 7h1a3 3 0 1 0 0-6h-1v6Z" transform="translate(0 6)"/>
+                                <circle cx="10" cy="17" r="3" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="15" cy="9.5" r="3" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">Figma</span>
+                    </a>
 
-            <!-- LinkedIn -->
-            <a href="https://open-session.link/linkedin-social" target="_blank" rel="noopener noreferrer" class="link-item">
-                <div class="link-icon-wrapper">
-                    <img src="Linkree_linkedin_thumbnails.png" alt="LinkedIn" class="link-icon">
-                </div>
-                <span class="link-text">LinkedIn</span>
-            </a>
+                    <!-- 6. Instagram -->
+                    <a href="https://open-session.link/instagram-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Instagram">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3.75" y="3.75" width="16.5" height="16.5" rx="4" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="17.5" cy="6.5" r="1.25" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">Instagram</span>
+                    </a>
 
-            <!-- Instagram -->
-            <a href="https://open-session.link/instagram-social" target="_blank" rel="noopener noreferrer" class="link-item">
-                <div class="link-icon-wrapper">
-                    <img src="Linkree_instagram_thumbnails.png" alt="Instagram" class="link-icon">
+                    <!-- 7. LinkedIn -->
+                    <a href="https://open-session.link/linkedin-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="LinkedIn">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                <rect x="7" y="10" width="2" height="7" fill="currentColor"/>
+                                <circle cx="8" cy="7" r="1" fill="currentColor"/>
+                                <path d="M12 10h1.8a2.2 2.2 0 0 1 2.2 2.2V17h-2v-4c0-.66-.54-1.2-1.2-1.2H12V10Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">LinkedIn</span>
+                    </a>
+
+                    <!-- 8. Newsletter -->
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Newsletter (please provide URL)">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="link-text">Newsletter</span>
+                    </a>
                 </div>
-                <span class="link-text">Instagram</span>
-            </a>
-        </div>
+            </nav>
+        </section>
 
         <!-- Footer -->
-        <div class="footer">
+        <footer class="footer" role="contentinfo">
             <p class="footer-text">© 2024 Open Session</p>
-        </div>
-    </div>
+        </footer>
+    </main>
 
     <script>
-        // Simple fade-in animation on load
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-
         // Optional: Track link clicks for analytics
         document.querySelectorAll('.link-item').forEach(link => {
             link.addEventListener('click', function() {
                 const linkText = this.querySelector('.link-text').textContent;
                 console.log(`Clicked: ${linkText}`);
             });
+        });
+        
+        // Staggered animation delays for links
+        const links = document.querySelectorAll('.links-container .link-item');
+        links.forEach((el, idx) => {
+            el.style.animationDelay = `${200 + idx * 60}ms`;
         });
     </script>
 </body>
