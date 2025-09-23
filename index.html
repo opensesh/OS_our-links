@@ -301,11 +301,17 @@
             flex-shrink: 0;
         }
 
-        .link-icon svg {
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
+		.link-icon svg {
+			width: 24px;
+			height: 24px;
+			display: block;
+		}
+		.link-icon img {
+			width: 24px;
+			height: 24px;
+			display: block;
+			object-fit: contain;
+		}
 
         .link-text {
             font-size: 1rem;
@@ -380,85 +386,57 @@
                 <div class="links-container">
                     <!-- 1. Website -->
                     <a href="https://open-session.link/website-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Website">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M3 12h18M12 3c2.5 2.7 3.75 5.8 3.75 9s-1.25 6.3-3.75 9c-2.5-2.7-3.75-5.8-3.75-9s1.25-6.3 3.75-9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                        </div>
+					<div class="link-icon-wrapper link-icon" aria-hidden="true">
+						<img src="assets/images/Linkree_website_thumbnails.png" alt="" width="24" height="24">
+					</div>
                         <span class="link-text">Website</span>
                     </a>
 
                     <!-- 2. YouTube -->
                     <a href="https://open-session.link/youtube-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="YouTube">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3" y="6.5" width="18" height="11" rx="3" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M11 10l4 2-4 2v-4Z" fill="currentColor"/>
-                            </svg>
-                        </div>
+					<div class="link-icon-wrapper link-icon" aria-hidden="true">
+						<img src="assets/images/Linkree_youtube_thumbnails.png" alt="" width="24" height="24">
+					</div>
                         <span class="link-text">YouTube</span>
                     </a>
 
                     <!-- 3. Medium -->
                     <a href="https://open-session.link/medium-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Medium">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M7 16V8h1.2l3 4.6L14.2 8H16v8h-1.3v-5.4L11.2 14h-.4L8.3 10.6V16H7Z" fill="currentColor"/>
-                            </svg>
-                        </div>
+					<div class="link-icon-wrapper link-icon" aria-hidden="true">
+						<img src="assets/images/Linkree_medium_thumbnails.png" alt="" width="24" height="24">
+					</div>
                         <span class="link-text">Medium</span>
                     </a>
 
                     <!-- 4. Substack -->
                     <a href="https://open-session.link/substack-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Substack">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 6.5h16v2H4z" fill="currentColor"/>
-                                <path d="M4 10h16v2H4z" fill="currentColor"/>
-                                <path d="M6 6.5v10.5l6 3 6-3V6.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
+					<div class="link-icon-wrapper link-icon" aria-hidden="true">
+						<img src="assets/images/Linkree_substack_thumbnails.png" alt="" width="24" height="24">
+					</div>
                         <span class="link-text">Substack</span>
                     </a>
 
                     <!-- 5. Figma -->
                     <a href="https://open-session.link/figma-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Figma">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
-                                <circle cx="10" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M13 7h1a3 3 0 1 0 0-6h-1v6Z" transform="translate(0 6)"/>
-                                <circle cx="10" cy="17" r="3" stroke="currentColor" stroke-width="1.5"/>
-                                <circle cx="15" cy="9.5" r="3" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
-                        </div>
+					<div class="link-icon-wrapper link-icon" aria-hidden="true">
+						<img src="assets/images/Linkree_figma_thumbnails.png" alt="" width="24" height="24">
+					</div>
                         <span class="link-text">Figma</span>
                     </a>
 
                     <!-- 6. Instagram -->
                     <a href="https://open-session.link/instagram-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Instagram">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3.75" y="3.75" width="16.5" height="16.5" rx="4" stroke="currentColor" stroke-width="1.5"/>
-                                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
-                                <circle cx="17.5" cy="6.5" r="1.25" fill="currentColor"/>
-                            </svg>
-                        </div>
+					<div class="link-icon-wrapper link-icon" aria-hidden="true">
+						<img src="assets/images/Linkree_instagram_thumbnails.png" alt="" width="24" height="24">
+					</div>
                         <span class="link-text">Instagram</span>
                     </a>
 
                     <!-- 7. LinkedIn -->
                     <a href="https://open-session.link/linkedin-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="LinkedIn">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                                <rect x="7" y="10" width="2" height="7" fill="currentColor"/>
-                                <circle cx="8" cy="7" r="1" fill="currentColor"/>
-                                <path d="M12 10h1.8a2.2 2.2 0 0 1 2.2 2.2V17h-2v-4c0-.66-.54-1.2-1.2-1.2H12V10Z" fill="currentColor"/>
-                            </svg>
-                        </div>
+					<div class="link-icon-wrapper link-icon" aria-hidden="true">
+						<img src="assets/images/Linkree_linkedin_thumbnails.png" alt="" width="24" height="24">
+					</div>
                         <span class="link-text">LinkedIn</span>
                     </a>
                 </div>
