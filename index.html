@@ -32,6 +32,7 @@
 
             --text-secondary: rgba(255, 250, 238, 0.64);
             --radius: 4px;
+			--ascii-opacity: 0.18; /* subtle background intensity */
 
             /* Typography (fallbacks until custom font is provided) */
             --font-display: "Neue Haas Grotesk Display Pro", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -110,7 +111,38 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header Background Image */
+		/* ASCII dots animated background */
+		#ascii-background {
+			position: fixed;
+			inset: 0;
+			z-index: -2; /* behind everything */
+			color: var(--color-text);
+			opacity: var(--ascii-opacity);
+			pointer-events: none;
+			mix-blend-mode: normal;
+			filter: blur(0.3px); /* optional dreamy effect, very subtle */
+		}
+
+		.ascii-layer {
+			position: absolute;
+			inset: 0;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+			white-space: pre;
+			line-height: 1.25;
+			letter-spacing: 1px;
+			font-size: 11px;
+			transition: opacity 600ms var(--easing-standard);
+			opacity: 0;
+		}
+
+		.ascii-layer.is-visible {
+			opacity: 1;
+		}
+
+		/* Toggle support */
+		.ascii-dots-disabled #ascii-background { display: none; }
+
+		/* Header Background Image */
         .header-background {
             position: absolute;
             top: 0;
@@ -308,6 +340,11 @@
     </style>
 </head>
 <body>
+	<!-- Animated ASCII dots background -->
+	<div id="ascii-background" aria-hidden="true">
+		<pre class="ascii-layer" id="ascii-a"></pre>
+		<pre class="ascii-layer" id="ascii-b"></pre>
+	</div>
     <!-- Header Background -->
     <div class="header-background"></div>
     <div class="header-gradient"></div>
@@ -413,17 +450,6 @@
                         </div>
                         <span class="link-text">LinkedIn</span>
                     </a>
-
-                    <!-- 8. Newsletter -->
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Newsletter (please provide URL)">
-                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <span class="link-text">Newsletter</span>
-                    </a>
                 </div>
             </nav>
         </section>
@@ -448,6 +474,100 @@
         links.forEach((el, idx) => {
             el.style.animationDelay = `${200 + idx * 60}ms`;
         });
+
+        // ASCII dots background animation (inspired by 21st.dev delicate dots)
+        // Reference: https://21st.dev/uilayout.contact/delicate-ascii-dots/default
+        (function initAsciiDots() {
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReduced) return; // respect user preference
+
+            const container = document.getElementById('ascii-background');
+            const layerA = document.getElementById('ascii-a');
+            const layerB = document.getElementById('ascii-b');
+            if (!container || !layerA || !layerB) return;
+
+            let visibleA = true;
+            let rafId = 0;
+            let timerId = 0;
+
+            function generateFrame(cols, rows, t) {
+                const chars = [' ', '.', '·', ':', '•'];
+                const output = [];
+                const frequency = 0.18; // spatial frequency
+                for (let y = 0; y < rows; y++) {
+                    let line = '';
+                    for (let x = 0; x < cols; x++) {
+                        // lightweight pseudo-noise using trig interference
+                        const v = (
+                            Math.sin((x * frequency) + t) +
+                            Math.cos((y * frequency) - t * 0.9) +
+                            Math.sin(((x + y) * frequency * 0.7) + t * 0.6)
+                        ) / 3; // normalize to [-1,1]
+                        const n = Math.floor(((v + 1) / 2) * (chars.length - 1));
+                        line += chars[n];
+                    }
+                    output.push(line);
+                }
+                return output.join('\n');
+            }
+
+            function sizeForViewport() {
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
+                const charWidth = 8.5;  // approximate monospace char width in px for font-size 11px
+                const charHeight = 14;  // approximate line height
+                const cols = Math.max(40, Math.floor(vw / charWidth));
+                const rows = Math.max(22, Math.floor(vh / charHeight));
+                return { cols, rows };
+            }
+
+            function render(timeMs) {
+                const t = (timeMs || performance.now()) / 900; // ~0.9s cycle (~0.5-1s)
+                const { cols, rows } = sizeForViewport();
+                const next = generateFrame(cols, rows, t);
+
+                const incoming = visibleA ? layerB : layerA;
+                const outgoing = visibleA ? layerA : layerB;
+                incoming.textContent = next;
+
+                // crossfade for smoothness
+                incoming.classList.add('is-visible');
+                outgoing.classList.remove('is-visible');
+                visibleA = !visibleA;
+            }
+
+            function loop() {
+                rafId = requestAnimationFrame(() => {
+                    render(performance.now());
+                });
+                timerId = setTimeout(loop, 700); // ~0.7s between states
+            }
+
+            // initial render
+            render(performance.now());
+            loop();
+
+            // handle resize
+            let resizeTO = 0;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTO);
+                resizeTO = setTimeout(() => render(performance.now()), 150);
+            });
+
+            // expose toggle via body class
+            const observer = new MutationObserver(() => {
+                const disabled = document.body.classList.contains('ascii-dots-disabled');
+                if (disabled) {
+                    container.style.display = 'none';
+                    cancelAnimationFrame(rafId);
+                    clearTimeout(timerId);
+                } else {
+                    container.style.display = '';
+                    loop();
+                }
+            });
+            observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        })();
     </script>
 </body>
 </html>
