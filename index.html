@@ -6,11 +6,14 @@
     <meta name="description" content="Open Session - Your design workflow, upgraded. Figma templates, AI workflows, and the latest designer insights">
     <meta property="og:title" content="Open Session">
     <meta property="og:description" content="Your design workflow, upgraded. Figma templates, AI workflows, and the latest designer insights">
-    <meta property="og:image" content="3D_Logo_rotation__1_.gif">
+    <meta property="og:image" content="assets/images/3D Logo_rotation_square_compressed.gif">
     <title>Open Session | Links</title>
     
     <!-- Google Fonts (fallbacks) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Preload critical local fonts -->
+    <link rel="preload" as="font" href="assets/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-55Rg.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/NeueHassGrotesk_Display/NeueHaasDisplayBold.woff2" type="font/woff2" crossorigin>
     
     <style>
         * {
@@ -45,6 +48,57 @@
             --duration-fast: 0.2s;
         }
 
+        /* Local font faces */
+        @font-face {
+            font-family: "Neue Haas Grotesk Display Pro";
+            src: url("assets/fonts/NeueHassGrotesk_Display/NeueHaasDisplayLight.woff2") format("woff2");
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Neue Haas Grotesk Display Pro";
+            src: url("assets/fonts/NeueHassGrotesk_Display/NeueHaasDisplayRoman.woff2") format("woff2");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Neue Haas Grotesk Display Pro";
+            src: url("assets/fonts/NeueHassGrotesk_Display/NeueHaasDisplayMedium.woff2") format("woff2");
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Neue Haas Grotesk Display Pro";
+            src: url("assets/fonts/NeueHassGrotesk_Display/NeueHaasDisplayBold.woff2") format("woff2");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Neue Haas Grotesk Text Pro";
+            src: url("assets/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-55Rg.woff2") format("woff2");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Neue Haas Grotesk Text Pro";
+            src: url("assets/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-65Md.woff2") format("woff2");
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Neue Haas Grotesk Text Pro";
+            src: url("assets/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-75Bd.woff2") format("woff2");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
         body {
             font-family: var(--font-body);
             background-color: var(--color-background);
@@ -52,6 +106,8 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Header Background Image */
@@ -62,9 +118,9 @@
             width: 100%;
             height: 240px;
             z-index: 0;
-            background-image: url('OS_brand_medium_profile_cover.jpg');
+            background-image: url('assets/images/OS_brand_medium_profile cover.jpg');
             background-size: cover;
-            background-position: center;
+            background-position: top center;
             background-repeat: no-repeat;
             opacity: 0.35;
         }
@@ -263,10 +319,10 @@
         <!-- Profile Section -->
         <section class="profile-section" aria-label="Profile">
             <div class="profile-image" aria-hidden="true">
-                <img src="3D_Logo_rotation__1_.gif" alt="Open Session logo">
+                <img src="assets/images/3D Logo_rotation_square_compressed.gif" alt="Open Session logo">
             </div>
             <h1 class="profile-name">Open Session</h1>
-            <p class="profile-tagline">Your design workflow, upgraded. Figma templates, AI workflows, and the latest designer insights</p>
+            <p class="profile-tagline"><strong>Your design workflow, upgraded.</strong><br>Figma templates, AI workflows, and the latest designer insights</p>
         </section>
 
         <!-- Links Section -->
