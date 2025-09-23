@@ -136,6 +136,11 @@
 			font-size: 10px;
 			transition: opacity 600ms var(--easing-standard);
 			opacity: 0;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			font-variant-ligatures: none;
+			font-feature-settings: "liga" 0, "calt" 0;
 		}
 
 		.ascii-layer.is-visible {
@@ -498,11 +503,28 @@
                 return output.join('\n');
             }
 
+            function measureChar() {
+                // Create a hidden ruler to measure exact char size in current styles
+                const ruler = document.createElement('span');
+                ruler.textContent = 'M';
+                ruler.style.position = 'absolute';
+                ruler.style.visibility = 'hidden';
+                ruler.style.whiteSpace = 'pre';
+                ruler.style.fontFamily = getComputedStyle(layerA).fontFamily;
+                ruler.style.fontSize = getComputedStyle(layerA).fontSize;
+                ruler.style.lineHeight = getComputedStyle(layerA).lineHeight;
+                document.body.appendChild(ruler);
+                const rect = ruler.getBoundingClientRect();
+                document.body.removeChild(ruler);
+                const width = Math.max(1, rect.width);
+                const height = Math.max(1, rect.height);
+                return { width, height };
+            }
+
             function sizeForViewport() {
                 const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                 const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-                const charWidth = 8.0;  // approximate monospace char width in px for font-size 10px
-                const charHeight = 12.0;  // approximate line height
+                const { width: charWidth, height: charHeight } = measureChar();
                 const cols = Math.max(40, Math.ceil(vw / charWidth));
                 const rows = Math.max(22, Math.ceil(vh / charHeight));
                 return { cols, rows };
@@ -516,6 +538,17 @@
                 const incoming = visibleA ? layerB : layerA;
                 const outgoing = visibleA ? layerA : layerB;
                 incoming.textContent = next;
+
+                // ensure each line spans the full width by padding to cols
+                // (in rare cases where char measurement underestimates)
+                // Pad with spaces to avoid visual right gap
+                const lines = next.split('\n');
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].length < cols) {
+                        lines[i] = lines[i] + ' '.repeat(cols - lines[i].length);
+                    }
+                }
+                incoming.textContent = lines.join('\n');
 
                 // crossfade for smoothness
                 incoming.classList.add('is-visible');
