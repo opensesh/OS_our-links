@@ -115,14 +115,13 @@
 		#ascii-background {
 			position: fixed;
 			inset: 0;
-			width: 100vw;
-			height: 100vh;
 			z-index: -2; /* behind everything */
 			color: var(--color-text);
 			opacity: var(--ascii-opacity);
 			pointer-events: none;
 			mix-blend-mode: normal;
 			filter: blur(0.3px); /* optional dreamy effect, very subtle */
+			overflow: hidden; /* avoid any right-side gap */
 		}
 
 		.ascii-layer {
@@ -146,36 +145,23 @@
 		/* Toggle support */
 		.ascii-dots-disabled #ascii-background { display: none; }
 
-		/* Header Background Image */
-		.header-background {
-			position: sticky;
-            top: 0;
-            left: 0;
-            width: 100%;
-			height: 320px; /* extends to just above Contact */
-            z-index: 0;
-            background-image: url('assets/images/OS_brand_medium_profile cover.jpg');
-            background-size: cover;
-            background-position: top center;
-            background-repeat: no-repeat;
-            opacity: 0.35;
-        }
+		/* Header gradient only (image removed) */
+		.header-gradient {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 260px; /* subtle top fade */
+			background: linear-gradient(180deg,
+				rgba(25, 25, 25, 1) 0%,
+				rgba(25, 25, 25, 0.6) 40%,
+				rgba(25, 25, 25, 0) 100%);
+			z-index: 0;
+			pointer-events: none;
+		}
 
-        .header-gradient {
-			position: sticky;
-            top: 0;
-            left: 0;
-            width: 100%;
-			height: 420px; /* fade further to meet the point between tagline and Contact */
-            background: linear-gradient(180deg,
-                rgba(25, 25, 25, 0) 0%,
-                rgba(25, 25, 25, 0.6) 55%,
-                rgba(25, 25, 25, 1) 100%);
-            z-index: 1;
-        }
-
-        /* Spacer to create header area for overlap */
-		.hero-spacer { height: 220px; }
+		/* Spacer to create header area for overlap */
+		.hero-spacer { height: 140px; }
 
         /* Container */
         .container {
@@ -347,8 +333,7 @@
 		<pre class="ascii-layer" id="ascii-a"></pre>
 		<pre class="ascii-layer" id="ascii-b"></pre>
 	</div>
-    <!-- Header Background -->
-    <div class="header-background"></div>
+    <!-- Header Gradient Only -->
     <div class="header-gradient"></div>
     
     <!-- Main Container -->
@@ -514,8 +499,8 @@
             }
 
             function sizeForViewport() {
-                const vw = window.innerWidth;
-                const vh = window.innerHeight;
+                const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
                 const charWidth = 8.0;  // approximate monospace char width in px for font-size 10px
                 const charHeight = 12.0;  // approximate line height
                 const cols = Math.max(40, Math.ceil(vw / charWidth));
