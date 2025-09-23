@@ -14,6 +14,7 @@
     <!-- Preload critical local fonts -->
     <link rel="preload" as="font" href="assets/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-55Rg.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="assets/fonts/NeueHassGrotesk_Display/NeueHaasDisplayBold.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/offbit_Web/OffBit-101Bold.woff2" type="font/woff2" crossorigin>
     
     <style>
         * {
@@ -99,6 +100,15 @@
             font-style: normal;
             font-display: swap;
         }
+
+		/* OffBit 101 (Bold) for tagline emphasis */
+		@font-face {
+			font-family: "OffBit 101";
+			src: url("assets/fonts/offbit_Web/OffBit-101Bold.woff2") format("woff2");
+			font-weight: 700;
+			font-style: normal;
+			font-display: swap;
+		}
 
         body {
             font-family: var(--font-body);
@@ -222,6 +232,15 @@
             margin-bottom: 0.75rem;
             animation: fadeUp 600ms var(--easing-standard) 120ms both;
         }
+
+		.profile-tagline strong {
+			font-family: "OffBit 101", var(--font-display);
+			font-weight: 700;
+			display: inline-block;
+			font-size: 1.2rem; /* slightly larger for emphasis */
+			line-height: 1.3;
+			color: var(--color-text);
+		}
 
         /* Contact Section */
         .section-title {
