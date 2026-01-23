@@ -8,7 +8,7 @@
     <meta property="og:description" content="Your design workflow, upgraded. Figma templates, AI workflows, and the latest designer insights">
     <meta property="og:image" content="assets/images/3D Logo_rotation_square_compressed.gif">
     <title>Open Session | Links</title>
-    
+
     <!-- Google Fonts (fallbacks) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Preload critical local fonts -->
@@ -32,30 +32,61 @@
         }
 
         :root {
-            /* Design System */
-            --color-background: #191919; /* Charcoal */
-            --color-text: #FFFAEE;       /* Vanilla */
-            --color-container: #232323;  /* Containers */
-            --color-hover: #2D2D2D;      /* Hover */
-            --color-accent: #FE5102;     /* Aperol */
+            /* BOS Design Tokens */
+            --bg-primary: #191919;
+            --bg-secondary: #1f1f1f;
+            --bg-tertiary: #2a2a2a;
+            --fg-primary: #FFFAEE;
+            --fg-secondary: #d5d1cb;
+            --fg-tertiary: #a8a29b;
+            --fg-quaternary: #78726a;
+            --color-aperol: #FE5102;
 
-            --text-secondary: rgba(255, 250, 238, 0.64);
-            --radius: 4px;
-			--ascii-opacity: 0.18; /* subtle background intensity */
+            /* Borders */
+            --border-secondary: #2e2e2e;
+            --border-primary: #3d3d3d;
 
-            /* Typography (fallbacks until custom font is provided) */
+            /* Radius */
+            --radius-brand: 12px;
+            --radius-brand-lg: 16px;
+
+            /* Spacing Scale */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --space-24: 6rem;
+
+            /* Motion */
+            --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+            --duration-micro: 150ms;
+            --duration-fast: 200ms;
+            --duration-content: 400ms;
+
+            /* Shadows (warm, charcoal-based) */
+            --shadow-sm: 0 2px 4px rgba(25, 25, 25, 0.2);
+            --shadow-md: 0 4px 12px rgba(25, 25, 25, 0.3);
+            --shadow-lg: 0 12px 16px -4px rgba(25, 25, 25, 0.3), 0 4px 6px -2px rgba(25, 25, 25, 0.15);
+            --shadow-xl: 0 20px 40px -8px rgba(25, 25, 25, 0.4), 0 8px 16px -4px rgba(25, 25, 25, 0.2);
+            --shadow-profile: 0 12px 32px rgba(25, 25, 25, 0.5), 0 4px 12px rgba(25, 25, 25, 0.3);
+
+            /* ASCII */
+            --ascii-opacity: 0.10;
+
+            /* Typography */
             --font-display: "Neue Haas Grotesk Display Pro", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
             --font-body: "Neue Haas Grotesk Text Pro", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-            /* Spacing */
-            --container-padding-mobile: 16px;
-            --container-padding-desktop: 32px;
-            --gap-mobile: 12px;
-            --gap-desktop: 20px;
-
-            /* Motion */
-            --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-            --duration-fast: 0.2s;
+            /* Layout */
+            --link-gap-mobile: 12px;
+            --link-gap-desktop: 20px;
         }
 
         /* Local font faces */
@@ -109,112 +140,118 @@
             font-display: swap;
         }
 
-		/* OffBit 101 (Bold) for tagline emphasis */
-		@font-face {
-			font-family: "OffBit 101";
-			src: url("assets/fonts/offbit_Web/OffBit-101Bold.woff2") format("woff2");
-			font-weight: 700;
-			font-style: normal;
-			font-display: swap;
-		}
+        /* OffBit 101 (Bold) for tagline emphasis */
+        @font-face {
+            font-family: "OffBit 101";
+            src: url("assets/fonts/offbit_Web/OffBit-101Bold.woff2") format("woff2");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
 
+        /* Body — viewport centering */
         body {
             font-family: var(--font-body);
-            background-color: var(--color-background);
-            color: var(--color-text);
+            background-color: var(--bg-primary);
+            color: var(--fg-primary);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-		/* ASCII dots animated background */
-		#ascii-background {
-			position: fixed;
-			inset: 0;
-			z-index: -2; /* behind everything */
-			color: var(--color-text);
-			opacity: var(--ascii-opacity);
-			pointer-events: none;
-			mix-blend-mode: normal;
-			filter: blur(0.3px); /* optional dreamy effect, very subtle */
-			overflow: hidden; /* avoid any right-side gap */
-		}
+        /* ASCII dots animated background */
+        #ascii-background {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            color: var(--fg-primary);
+            opacity: var(--ascii-opacity);
+            pointer-events: none;
+            mix-blend-mode: normal;
+            filter: blur(0.3px);
+            overflow: hidden;
+        }
 
-		.ascii-layer {
-			position: absolute;
-			inset: 0;
-			width: 100%;
-			height: 100%;
-			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-			white-space: pre;
-			line-height: 1.2;
-			letter-spacing: 0;
-			font-size: 10px;
-			transition: opacity 600ms var(--easing-standard);
-			opacity: 0;
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-			font-variant-ligatures: none;
-			font-feature-settings: "liga" 0, "calt" 0;
-		}
+        .ascii-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            white-space: pre;
+            line-height: 1.2;
+            letter-spacing: 0;
+            font-size: 10px;
+            transition: opacity var(--duration-content) var(--ease-out);
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-variant-ligatures: none;
+            font-feature-settings: "liga" 0, "calt" 0;
+        }
 
-		.ascii-layer.is-visible {
-			opacity: 1;
-		}
+        .ascii-layer.is-visible {
+            opacity: 1;
+        }
 
-		/* Toggle support */
-		.ascii-dots-disabled #ascii-background { display: none; }
+        /* Toggle support */
+        .ascii-dots-disabled #ascii-background { display: none; }
 
-		/* Header gradient only (image removed) */
-		.header-gradient {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 260px; /* subtle top fade */
-			background: linear-gradient(180deg,
-				rgba(25, 25, 25, 1) 0%,
-				rgba(25, 25, 25, 0.6) 40%,
-				rgba(25, 25, 25, 0) 100%);
-			z-index: 0;
-			pointer-events: none;
-		}
+        /* Header gradient */
+        .header-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 260px;
+            background: linear-gradient(180deg,
+                var(--bg-primary) 0%,
+                rgba(25, 25, 25, 0.6) 40%,
+                rgba(25, 25, 25, 0) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
 
-		/* Spacer to create header area for overlap */
-		.hero-spacer { height: 140px; }
+        /* Spacer for header overlap */
+        .hero-spacer { height: 120px; }
 
         /* Container */
         .container {
-            max-width: 680px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 0 var(--container-padding-mobile);
+            padding: 0 var(--space-5);
             position: relative;
             z-index: 2;
+            width: 100%;
         }
 
         /* Profile Section */
         .profile-section {
             text-align: center;
             padding-top: 0;
-            margin-bottom: 2rem;
+            margin-bottom: var(--space-10);
         }
 
         .profile-image {
-            width: 160px;
-            height: 160px;
-            margin: -80px auto 1.5rem; /* overlap header by 50% */
-            border-radius: var(--radius);
+            width: 140px;
+            height: 140px;
+            margin: -70px auto var(--space-6);
+            border-radius: var(--radius-brand-lg);
             overflow: hidden;
-            background: var(--color-container);
+            background: var(--bg-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-            animation: fadeUp 600ms var(--easing-standard) both;
+            box-shadow: var(--shadow-profile);
+            animation: fadeInUp var(--duration-content) var(--ease-out) both;
         }
 
         .profile-image img {
@@ -226,124 +263,142 @@
         .profile-name {
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 0.75rem;
+            margin-bottom: var(--space-3);
             letter-spacing: -0.02em;
+            line-height: 1.2;
             font-family: var(--font-display);
-            animation: fadeUp 600ms var(--easing-standard) 60ms both;
+            animation: fadeInUp var(--duration-content) var(--ease-out) 100ms both;
         }
 
         .profile-tagline {
-            font-size: 1.0625rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-weight: 500;
-            margin-bottom: 0.75rem;
-            animation: fadeUp 600ms var(--easing-standard) 120ms both;
+            font-size: 1rem;
+            color: var(--fg-secondary);
+            line-height: 1.7;
+            font-weight: 400;
+            margin-bottom: var(--space-3);
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp var(--duration-content) var(--ease-out) 150ms both;
         }
 
-		.profile-tagline strong {
-			font-family: "OffBit 101", var(--font-display);
-			font-weight: 700;
-			display: inline-block;
-			font-size: 1.2rem; /* slightly larger for emphasis */
-			line-height: 1.3;
-			color: var(--color-text);
-		}
+        .profile-tagline strong {
+            font-family: "OffBit 101", var(--font-display);
+            font-weight: 700;
+            display: inline-block;
+            font-size: 1.125rem;
+            line-height: 1.3;
+            color: var(--fg-primary);
+        }
 
-        /* Contact Section */
+        /* Section Title */
         .section-title {
             font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            margin-top: 3rem;
+            margin-bottom: var(--space-6);
+            margin-top: var(--space-12);
             font-family: var(--font-display);
-            animation: fadeUp 600ms var(--easing-standard) 180ms both;
+            animation: fadeInUp var(--duration-content) var(--ease-out) 180ms both;
         }
 
         /* Links Container */
         .links-container {
             display: flex;
             flex-direction: column;
-            gap: var(--gap-mobile);
+            gap: var(--link-gap-mobile);
         }
 
         .link-item {
-            background: var(--color-container);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius);
-            padding: 1rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-secondary);
+            border-radius: var(--radius-brand);
+            padding: 18px 20px;
             text-decoration: none;
-            color: var(--color-text);
-            transition: background-color var(--duration-fast) var(--easing-standard),
-                        transform var(--duration-fast) var(--easing-standard),
-                        box-shadow var(--duration-fast) var(--easing-standard),
-                        border-color var(--duration-fast) var(--easing-standard);
+            color: var(--fg-primary);
+            transition: background-color var(--duration-micro) var(--ease-out),
+                        transform var(--duration-micro) var(--ease-out),
+                        box-shadow var(--duration-fast) var(--ease-out),
+                        border-color var(--duration-fast) var(--ease-out);
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: var(--space-4);
             position: relative;
             overflow: hidden;
             outline: none;
             will-change: transform;
-            animation: fadeUp 600ms var(--easing-standard) both;
+            animation: scaleIn 300ms var(--ease-out) both;
         }
 
         .link-item:hover {
-            background: var(--color-hover);
-            border-color: rgba(255, 255, 255, 0.12);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            background: var(--bg-tertiary);
+            border-color: var(--border-primary);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .link-item:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-sm);
+            transition-duration: 80ms;
         }
 
         .link-item:focus-visible {
-            outline: 2px solid var(--color-accent);
+            outline: 2px solid var(--color-aperol);
             outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba(254, 81, 2, 0.12);
+            z-index: 1;
         }
 
         .link-icon-wrapper {
-            width: 24px;
-            height: 24px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            padding: 4px;
         }
 
-		.link-icon svg {
-			width: 24px;
-			height: 24px;
-			display: block;
-		}
-		.link-icon img {
-			width: 24px;
-			height: 24px;
-			display: block;
-			object-fit: contain;
-		}
+        .link-icon svg {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+        .link-icon img {
+            width: 24px;
+            height: 24px;
+            display: block;
+            object-fit: contain;
+        }
 
         .link-text {
             font-size: 1rem;
             font-weight: 500;
             letter-spacing: 0.01em;
+            line-height: 1.5;
         }
 
         /* Footer */
         .footer {
             text-align: center;
-            margin-top: 4rem;
-            padding: 2rem 0 3rem;
+            margin-top: var(--space-16);
+            padding: var(--space-8) 0 var(--space-12);
+            border-top: 1px solid var(--border-secondary);
         }
 
         .footer-text {
-            color: var(--text-secondary);
+            color: var(--fg-quaternary);
             font-size: 0.875rem;
+            line-height: 1.5;
         }
 
         /* Animations */
-        @keyframes fadeUp {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(6px);
+                transform: translateY(12px);
             }
             to {
                 opacity: 1;
@@ -351,16 +406,100 @@
             }
         }
 
-        /* Responsive adjustments */
-        @media (min-width: 680px) {
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive: Tablet (640px+) */
+        @media (min-width: 640px) {
+            .hero-spacer { height: 140px; }
+
             .container {
-                padding: 0 var(--container-padding-desktop);
+                max-width: 720px;
+                padding: 0 var(--space-8);
             }
+
+            .profile-image {
+                width: 160px;
+                height: 160px;
+                margin-top: -80px;
+            }
+
+            .profile-section {
+                margin-bottom: var(--space-12);
+            }
+
             .links-container {
-                gap: var(--gap-desktop);
+                gap: var(--link-gap-desktop);
             }
+
             .link-item {
-                padding: 1.125rem 1.25rem;
+                padding: 20px 24px;
+            }
+        }
+
+        /* Responsive: Desktop (1024px+) */
+        @media (min-width: 1024px) {
+            .hero-spacer { height: 160px; }
+
+            .container {
+                max-width: 780px;
+                padding: 0 var(--space-12);
+            }
+
+            .profile-image {
+                width: 180px;
+                height: 180px;
+                margin-top: -90px;
+            }
+
+            .profile-name {
+                font-size: 3rem;
+            }
+
+            .profile-section {
+                margin-bottom: var(--space-16);
+            }
+
+            .link-item {
+                padding: 22px 28px;
+            }
+
+            .footer {
+                margin-top: var(--space-20);
+            }
+        }
+
+        /* Responsive: Large Desktop (1280px+) */
+        @media (min-width: 1280px) {
+            .container {
+                max-width: 820px;
+            }
+        }
+
+        /* Accessibility: Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Accessibility: High contrast / forced colors */
+        @media (forced-colors: active) {
+            .link-item {
+                border: 1px solid CanvasText;
+            }
+            .link-item:focus-visible {
+                outline: 2px solid Highlight;
             }
         }
     </style>
@@ -371,14 +510,14 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-	<!-- Animated ASCII dots background -->
-	<div id="ascii-background" aria-hidden="true">
-		<pre class="ascii-layer" id="ascii-a"></pre>
-		<pre class="ascii-layer" id="ascii-b"></pre>
-	</div>
-    <!-- Header Gradient Only -->
+    <!-- Animated ASCII dots background -->
+    <div id="ascii-background" aria-hidden="true">
+        <pre class="ascii-layer" id="ascii-a"></pre>
+        <pre class="ascii-layer" id="ascii-b"></pre>
+    </div>
+    <!-- Header Gradient -->
     <div class="header-gradient"></div>
-    
+
     <!-- Main Container -->
     <main id="main-content" class="container" role="main">
         <div class="hero-spacer" aria-hidden="true"></div>
@@ -397,59 +536,67 @@
             <h2 id="links-heading" class="section-title" aria-label="Links"></h2>
             <nav aria-label="Primary links">
                 <div class="links-container">
-                    <!-- 1. Website -->
+                    <!-- 1. GitHub -->
+                    <a href="https://github.com/opensesh" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="GitHub">
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_github_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
+                        <span class="link-text">GitHub</span>
+                    </a>
+
+                    <!-- 2. Website -->
                     <a href="https://open-session.link/website-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Website">
-					<div class="link-icon-wrapper link-icon" aria-hidden="true">
-						<img src="assets/images/Linkree_website_thumbnails.svg" alt="" width="24" height="24">
-					</div>
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_website_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
                         <span class="link-text">Website</span>
                     </a>
 
-                    <!-- 2. YouTube -->
+                    <!-- 3. YouTube -->
                     <a href="https://open-session.link/youtube-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="YouTube">
-					<div class="link-icon-wrapper link-icon" aria-hidden="true">
-						<img src="assets/images/Linkree_youtube_thumbnails.svg" alt="" width="24" height="24">
-					</div>
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_youtube_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
                         <span class="link-text">YouTube</span>
                     </a>
 
-                    <!-- 3. Medium -->
+                    <!-- 4. Medium -->
                     <a href="https://open-session.link/medium-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Medium">
-					<div class="link-icon-wrapper link-icon" aria-hidden="true">
-						<img src="assets/images/Linkree_medium_thumbnails.svg" alt="" width="24" height="24">
-					</div>
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_medium_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
                         <span class="link-text">Medium</span>
                     </a>
 
-                    <!-- 4. Substack -->
+                    <!-- 5. Substack -->
                     <a href="https://open-session.link/substack-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Substack">
-					<div class="link-icon-wrapper link-icon" aria-hidden="true">
-						<img src="assets/images/Linkree_substack_thumbnails.svg" alt="" width="24" height="24">
-					</div>
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_substack_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
                         <span class="link-text">Substack</span>
                     </a>
 
-                    <!-- 5. Figma -->
+                    <!-- 6. Figma -->
                     <a href="https://open-session.link/figma-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Figma">
-					<div class="link-icon-wrapper link-icon" aria-hidden="true">
-						<img src="assets/images/Linkree_figma_thumbnails.svg" alt="" width="24" height="24">
-					</div>
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_figma_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
                         <span class="link-text">Figma</span>
                     </a>
 
-                    <!-- 6. Instagram -->
+                    <!-- 7. Instagram -->
                     <a href="https://open-session.link/instagram-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="Instagram">
-					<div class="link-icon-wrapper link-icon" aria-hidden="true">
-						<img src="assets/images/Linkree_instagram_thumbnails.svg" alt="" width="24" height="24">
-					</div>
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_instagram_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
                         <span class="link-text">Instagram</span>
                     </a>
 
-                    <!-- 7. LinkedIn -->
+                    <!-- 8. LinkedIn -->
                     <a href="https://open-session.link/linkedin-social" target="_blank" rel="noopener noreferrer" class="link-item" role="button" aria-label="LinkedIn">
-					<div class="link-icon-wrapper link-icon" aria-hidden="true">
-						<img src="assets/images/Linkree_linkedin_thumbnails.svg" alt="" width="24" height="24">
-					</div>
+                        <div class="link-icon-wrapper link-icon" aria-hidden="true">
+                            <img src="assets/images/Linkree_linkedin_thumbnails.svg" alt="" width="24" height="24">
+                        </div>
                         <span class="link-text">LinkedIn</span>
                     </a>
                 </div>
@@ -458,30 +605,35 @@
 
         <!-- Footer -->
         <footer class="footer" role="contentinfo">
-            <p class="footer-text">© 2024 Open Session</p>
+            <p class="footer-text">&copy; 2024 Open Session</p>
         </footer>
     </main>
 
     <script>
-        // Optional: Track link clicks for analytics
+        // Track link clicks for analytics
         document.querySelectorAll('.link-item').forEach(link => {
             link.addEventListener('click', function() {
                 const linkText = this.querySelector('.link-text').textContent;
                 console.log(`Clicked: ${linkText}`);
             });
         });
-        
+
         // Staggered animation delays for links
         const links = document.querySelectorAll('.links-container .link-item');
         links.forEach((el, idx) => {
-            el.style.animationDelay = `${200 + idx * 60}ms`;
+            el.style.animationDelay = `${250 + idx * 50}ms`;
         });
 
-        // ASCII dots background animation (inspired by 21st.dev delicate dots)
-        // Reference: https://21st.dev/uilayout.contact/delicate-ascii-dots/default
+        // Footer fade-in
+        const footer = document.querySelector('.footer');
+        if (footer) {
+            footer.style.animation = `fadeInUp 400ms cubic-bezier(0.4, 0, 0.2, 1) 550ms both`;
+        }
+
+        // ASCII dots background animation
         (function initAsciiDots() {
             const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (prefersReduced) return; // respect user preference
+            if (prefersReduced) return;
 
             const container = document.getElementById('ascii-background');
             const layerA = document.getElementById('ascii-a');
@@ -495,16 +647,15 @@
             function generateFrame(cols, rows, t) {
                 const chars = [' ', '.', '·', ':', '•'];
                 const output = [];
-                const frequency = 0.18; // spatial frequency
+                const frequency = 0.18;
                 for (let y = 0; y < rows; y++) {
                     let line = '';
                     for (let x = 0; x < cols; x++) {
-                        // lightweight pseudo-noise using trig interference
                         const v = (
                             Math.sin((x * frequency) + t) +
                             Math.cos((y * frequency) - t * 0.9) +
                             Math.sin(((x + y) * frequency * 0.7) + t * 0.6)
-                        ) / 3; // normalize to [-1,1]
+                        ) / 3;
                         const n = Math.floor(((v + 1) / 2) * (chars.length - 1));
                         line += chars[n];
                     }
@@ -514,7 +665,6 @@
             }
 
             function measureChar() {
-                // Create a hidden ruler to measure exact char size in current styles
                 const ruler = document.createElement('span');
                 ruler.textContent = 'M';
                 ruler.style.position = 'absolute';
@@ -541,17 +691,13 @@
             }
 
             function render(timeMs) {
-                const t = (timeMs || performance.now()) / 900; // ~0.9s cycle (~0.5-1s)
+                const t = (timeMs || performance.now()) / 900;
                 const { cols, rows } = sizeForViewport();
                 const next = generateFrame(cols, rows, t);
 
                 const incoming = visibleA ? layerB : layerA;
                 const outgoing = visibleA ? layerA : layerB;
-                incoming.textContent = next;
 
-                // ensure each line spans the full width by padding to cols
-                // (in rare cases where char measurement underestimates)
-                // Pad with spaces to avoid visual right gap
                 const lines = next.split('\n');
                 for (let i = 0; i < lines.length; i++) {
                     if (lines[i].length < cols) {
@@ -560,7 +706,6 @@
                 }
                 incoming.textContent = lines.join('\n');
 
-                // crossfade for smoothness
                 incoming.classList.add('is-visible');
                 outgoing.classList.remove('is-visible');
                 visibleA = !visibleA;
@@ -570,21 +715,18 @@
                 rafId = requestAnimationFrame(() => {
                     render(performance.now());
                 });
-                timerId = setTimeout(loop, 700); // ~0.7s between states
+                timerId = setTimeout(loop, 700);
             }
 
-            // initial render
             render(performance.now());
             loop();
 
-            // handle resize
             let resizeTO = 0;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTO);
                 resizeTO = setTimeout(() => render(performance.now()), 150);
             });
 
-            // expose toggle via body class
             const observer = new MutationObserver(() => {
                 const disabled = document.body.classList.contains('ascii-dots-disabled');
                 if (disabled) {
