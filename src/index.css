@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+/* ===== BOS Design Tokens ===== */
+@theme {
+  /* Brand Colors */
+  --color-brand-charcoal: #191919;
+  --color-brand-vanilla: #FFFAEE;
+  --color-brand-aperol: #FE5102;
+
+  /* Background Tokens */
+  --color-bg-primary: #191919;
+  --color-bg-secondary: #1f1f1f;
+  --color-bg-tertiary: #2a2a2a;
+
+  /* Foreground Tokens */
+  --color-fg-primary: #FFFAEE;
+  --color-fg-secondary: #d5d1cb;
+  --color-fg-tertiary: #a8a29b;
+  --color-fg-quaternary: #78726a;
+
+  /* Border Tokens */
+  --color-border-primary: #3d3d3d;
+  --color-border-secondary: #2e2e2e;
+
+  /* Brand Radius */
+  --radius-brand: 12px;
+  --radius-brand-lg: 16px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-micro: 150ms;
+  --duration-fast: 200ms;
+  --duration-content: 400ms;
+
+  /* Shadows (warm, charcoal-based) */
+  --shadow-sm: 0 2px 4px rgba(25, 25, 25, 0.2);
+  --shadow-md: 0 4px 12px rgba(25, 25, 25, 0.3);
+  --shadow-lg: 0 12px 16px -4px rgba(25, 25, 25, 0.3), 0 4px 6px -2px rgba(25, 25, 25, 0.15);
+  --shadow-xl: 0 20px 40px -8px rgba(25, 25, 25, 0.4), 0 8px 16px -4px rgba(25, 25, 25, 0.2);
+  --shadow-profile: 0 12px 32px rgba(25, 25, 25, 0.5), 0 4px 12px rgba(25, 25, 25, 0.3);
+
+  /* Font Families */
+  --font-display: "Neue Haas Grotesk Display Pro", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Neue Haas Grotesk Text Pro", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-accent: "OffBit 101", var(--font-display);
+}
+
+/* ===== Font Faces ===== */
+
+/* Neue Haas Grotesk Display Pro */
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro";
+  src: url("/fonts/NeueHassGrotesk_Display/NeueHaasDisplayLight.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro";
+  src: url("/fonts/NeueHassGrotesk_Display/NeueHaasDisplayRoman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro";
+  src: url("/fonts/NeueHassGrotesk_Display/NeueHaasDisplayMedium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro";
+  src: url("/fonts/NeueHassGrotesk_Display/NeueHaasDisplayBold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Neue Haas Grotesk Text Pro */
+@font-face {
+  font-family: "Neue Haas Grotesk Text Pro";
+  src: url("/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-55Rg.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Text Pro";
+  src: url("/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-65Md.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Text Pro";
+  src: url("/fonts/NeueHassGrotesk_Text/NHaasGroteskTXPro-75Bd.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* OffBit 101 (Bold) for tagline emphasis */
+@font-face {
+  font-family: "OffBit 101";
+  src: url("/fonts/offbit_Web/OffBit-101Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== Base Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-primary);
+  color: var(--color-fg-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--duration-content) var(--ease-out) both;
+}
+
+/* ===== ASCII Background Styles ===== */
+.ascii-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: pre;
+  line-height: 1.2;
+  letter-spacing: 0;
+  font-size: 10px;
+  transition: opacity var(--duration-content) var(--ease-out);
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+
+.ascii-layer.is-visible {
+  opacity: 1;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
