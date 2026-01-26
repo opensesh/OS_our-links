@@ -161,12 +161,12 @@ export function CardNav() {
             }}
           >
             {/* Header Row */}
-            <div className="flex items-center justify-between h-[60px] px-4">
+            <div className="relative flex items-center justify-between h-[60px] px-4">
               {/* Hamburger / X Button */}
               <button
                 ref={hamburgerRef}
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+                className="relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 flex-shrink-0"
                 aria-label={isOpen ? "Close menu" : "Open menu"}
               >
                 <span
@@ -183,18 +183,40 @@ export function CardNav() {
                 />
               </button>
 
-              {/* Website Button */}
+              {/* Centered Horizontal Wordmark */}
+              <div className="absolute left-1/2 -translate-x-1/2">
+                <img
+                  src="/images/logo_horizontal-wordmark_charcoal.png"
+                  alt="Open Session"
+                  className="h-5 sm:h-6 w-auto"
+                />
+              </div>
+
+              {/* Globe Icon Button */}
               <a
                 href="https://opensession.co/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 text-sm font-medium rounded-lg transition-opacity hover:opacity-80"
+                className="flex items-center justify-center w-[43px] h-[43px] rounded-md transition-opacity hover:opacity-80 flex-shrink-0"
                 style={{
                   background: "var(--color-charcoal)",
-                  color: "var(--color-vanilla)",
                 }}
+                aria-label="Visit website"
               >
-                Website
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--color-vanilla)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                  <path d="M2 12h20" />
+                </svg>
               </a>
             </div>
 
