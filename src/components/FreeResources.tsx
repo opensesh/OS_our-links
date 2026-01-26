@@ -1,141 +1,147 @@
-import { useState } from 'react'
-import { freeResources, type Resource } from '@/data/resources'
-import { EmailGateModal, useEmailGate } from './EmailGateModal'
+"use client";
 
-interface FreeResourcesProps {
-  animationDelay?: number
-}
-
-function ResourceCard({
-  resource,
-  isUnlocked,
-  onUnlockClick,
-  animationDelay,
-}: {
-  resource: Resource
-  isUnlocked: boolean
-  onUnlockClick: (resource: Resource) => void
-  animationDelay: number
-}) {
-  const handleClick = () => {
-    if (isUnlocked) {
-      window.open(resource.href, '_blank')
-    } else {
-      onUnlockClick(resource)
-    }
-  }
-
+// Custom icon component - stroke-based for consistent outline style
+function ExternalLinkIcon() {
   return (
-    <button
-      onClick={handleClick}
-      className="flex-shrink-0 w-[200px] rounded-xl overflow-hidden text-left transition-all duration-200 animate-fade-in-up hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98]"
-      style={{
-        backgroundColor: 'var(--color-bg-secondary)',
-        border: '1px solid var(--color-border-secondary)',
-        animationDelay: `${animationDelay}ms`,
-      }}
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      {/* Thumbnail */}
-      <div
-        className="w-full h-24 relative overflow-hidden"
-        style={{ backgroundColor: 'var(--color-bg-tertiary)' }}
-      >
-        {resource.thumbnail && (
-          <img
-            src={resource.thumbnail}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        )}
-        {!isUnlocked && (
-          <div
-            className="absolute inset-0 flex items-center justify-center backdrop-blur-sm"
-            style={{ backgroundColor: 'rgba(25, 25, 25, 0.6)' }}
-          >
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: 'var(--color-brand-aperol)' }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <rect x="5" y="11" width="14" height="10" rx="2" stroke="white" strokeWidth="2" />
-                <path d="M8 11V7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7V11" stroke="white" strokeWidth="2" />
-              </svg>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="p-3">
-        <h3 className="text-sm font-semibold mb-1 line-clamp-1">{resource.title}</h3>
-        <p className="text-xs text-fg-secondary line-clamp-2">{resource.description}</p>
-      </div>
-    </button>
-  )
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
 }
 
-export function FreeResources({ animationDelay = 0 }: FreeResourcesProps) {
-  const { hasSubmitted, submitEmail, isResourceUnlocked, unlockResource } = useEmailGate()
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedResource, setSelectedResource] = useState<Resource | null>(null)
+interface ResourceCard {
+  id: string;
+  label: string;
+  badge: { text: string; variant: "coming-soon" | "live" };
+  image: string;
+  title: string;
+  description: string;
+  href: string;
+}
 
-  const handleUnlockClick = (resource: Resource) => {
-    setSelectedResource(resource)
-    setModalOpen(true)
-  }
+const resourceCards: ResourceCard[] = [
+  {
+    id: "brand-design-system",
+    label: "Identity",
+    badge: { text: "Coming Soon", variant: "coming-soon" },
+    image: "/images/brand-design-system.png",
+    title: "Brand Design System",
+    description:
+      "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables",
+    href: "#",
+  },
+  {
+    id: "resource-universe",
+    label: "Brand Resource Universe",
+    badge: { text: "Live", variant: "live" },
+    image: "/images/resource-universe.png",
+    title: "Resource Universe",
+    description:
+      "All of our favorite design tools and inspiration in one place. Constantly updated to keep you creative daily",
+    href: "#",
+  },
+  {
+    id: "portfolio",
+    label: "Portfolio",
+    badge: { text: "Coming Soon", variant: "coming-soon" },
+    image: "/images/portfolio.png",
+    title: "Portfolio",
+    description:
+      "Our co-founder's portfolio showcasing work from Google, Salesforce, and more",
+    href: "#",
+  },
+];
 
-  const handleEmailSubmit = (email: string) => {
-    submitEmail(email)
-    if (selectedResource) {
-      unlockResource(selectedResource.id)
-      // After unlocking, open the resource
-      window.open(selectedResource.href, '_blank')
-    }
-    setModalOpen(false)
-    setSelectedResource(null)
-  }
-
+function Badge({ text, variant }: { text: string; variant: "coming-soon" | "live" }) {
   return (
-    <section className="mb-8" aria-label="Free Resources">
-      <h2
-        className="text-xs font-medium uppercase tracking-wider px-1 mb-3 animate-fade-in-up"
-        style={{
-          color: 'var(--color-fg-tertiary)',
-          animationDelay: `${animationDelay}ms`,
-        }}
-      >
-        Free Resources
-      </h2>
+    <span
+      className={`
+        px-2.5 py-1 text-xs font-medium rounded-full
+        ${variant === "coming-soon" ? "badge-coming-soon" : "badge-live"}
+      `}
+    >
+      {text}
+    </span>
+  );
+}
 
-      {/* Horizontal Scroll Container */}
-      <div
-        className="flex gap-3 overflow-x-auto pb-2 -mx-5 px-5 snap-x snap-mandatory scrollbar-hide"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-      >
-        {freeResources.map((resource, idx) => (
-          <ResourceCard
-            key={resource.id}
-            resource={resource}
-            isUnlocked={hasSubmitted || isResourceUnlocked(resource.id)}
-            onUnlockClick={handleUnlockClick}
-            animationDelay={animationDelay + 60 + idx * 80}
-          />
-        ))}
+function ResourceCardComponent({ card }: { card: ResourceCard }) {
+  return (
+    <div className="resource-card">
+      {/* Image Area */}
+      <div className="relative h-[180px] bg-[#191919] rounded-t-xl overflow-hidden">
+        {/* Placeholder dark background - replace with actual images later */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a2a] to-[#191919]" />
+
+        {/* Label - Top Left */}
+        <span className="absolute top-3 left-3 px-2 py-0.5 text-xs font-medium bg-white/90 text-[#191919] rounded">
+          {card.label}
+        </span>
+
+        {/* Badge - Top Right */}
+        <div className="absolute top-3 right-3">
+          <Badge text={card.badge.text} variant={card.badge.variant} />
+        </div>
       </div>
 
-      {/* Email Gate Modal */}
-      <EmailGateModal
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false)
-          setSelectedResource(null)
-        }}
-        onSubmit={handleEmailSubmit}
-        resourceTitle={selectedResource?.title}
-      />
+      {/* Content Area */}
+      <div className="p-5">
+        <h3 className="font-accent text-lg font-bold text-[#191919] mb-2">
+          {card.title}
+        </h3>
+        <p className="text-sm text-[#191919]/80 leading-relaxed mb-4 line-clamp-3">
+          {card.description}
+        </p>
+        <a
+          href={card.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="card-button inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg"
+        >
+          Website
+          <ExternalLinkIcon />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+export function FreeResources() {
+  return (
+    <section className="w-full mt-8">
+      {/* Heading - aligned with content */}
+      <div className="px-4 mb-4">
+        <div className="max-w-[800px] mx-auto">
+          <h2
+            className="font-accent text-2xl sm:text-3xl font-bold"
+            style={{ color: "var(--color-vanilla)" }}
+          >
+            Free Resources
+          </h2>
+        </div>
+      </div>
+
+      {/* Scrollable Cards Container */}
+      <div className="resources-scroll-wrapper">
+        <div className="resources-scroll">
+          {resourceCards.map((card) => (
+            <ResourceCardComponent key={card.id} card={card} />
+          ))}
+          {/* Right padding spacer for scroll end */}
+          <div className="flex-shrink-0 w-4 sm:w-0" aria-hidden="true" />
+        </div>
+      </div>
     </section>
-  )
+  );
 }

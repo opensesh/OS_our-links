@@ -1,8 +1,0 @@
-export { AsciiBackground } from './AsciiBackground'
-export { CardNav } from './CardNav'
-export { Hero } from './Hero'
-export { LinkSection } from './LinkSection'
-export { FreeResources } from './FreeResources'
-export { SubstackFeed } from './SubstackFeed'
-export { TechDock } from './TechDock'
-export { EmailGateModal, useEmailGate } from './EmailGateModal'

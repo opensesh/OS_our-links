@@ -1,0 +1,381 @@
+@import "./theme.css";
+@import "tailwindcss";
+
+/* Font Declarations */
+@font-face {
+  font-family: "Offbit";
+  src: url("/fonts/OffBit-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Offbit";
+  src: url("/fonts/OffBit-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro";
+  src: url("/fonts/NeueHaasDisplayRoman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro";
+  src: url("/fonts/NeueHaasDisplayMedium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro";
+  src: url("/fonts/NeueHaasDisplayBold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Tailwind 4 Theme Configuration */
+@theme inline {
+  /* Typography */
+  --font-sans: "Neue Haas Grotesk Display Pro", system-ui, sans-serif;
+  --font-display: "Neue Haas Grotesk Display Pro", system-ui, sans-serif;
+  --font-accent: "Offbit", "Neue Haas Grotesk Display Pro", sans-serif;
+
+  /* Colors - Semantic tokens mapped from CSS variables */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-quaternary: var(--bg-quaternary);
+  --color-bg-overlay: var(--bg-overlay);
+  --color-bg-brand-solid: var(--bg-brand-solid);
+  --color-bg-brand-solid-hover: var(--bg-brand-solid_hover);
+
+  --color-fg-primary: var(--fg-primary);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-tertiary: var(--fg-tertiary);
+  --color-fg-quaternary: var(--fg-quaternary);
+  --color-fg-disabled: var(--fg-disabled);
+  --color-fg-placeholder: var(--fg-placeholder);
+  --color-fg-brand-primary: var(--fg-brand-primary);
+  --color-fg-brand-aperol: var(--fg-brand-aperol);
+  --color-fg-white: var(--fg-white);
+
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-tertiary: var(--border-tertiary);
+  --color-border-brand: var(--border-brand);
+  --color-border-brand-solid: var(--border-brand-solid);
+
+  /* Brand primitives */
+  --color-charcoal: #191919;
+  --color-vanilla: #fffaee;
+  --color-aperol: #fe5102;
+
+  /* Shadows */
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+
+  /* Border radius */
+  --radius-brand: 12px;
+  --radius-brand-lg: 16px;
+}
+
+/* Base styles */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  color: var(--fg-primary);
+  background: var(--bg-primary);
+  font-family: "Neue Haas Grotesk Display Pro", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus visible styles */
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Prevent text selection on UI elements */
+button,
+[role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-600);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500);
+}
+
+/* CardNav card hover effect */
+.nav-card {
+  outline: 2px solid transparent;
+  outline-offset: 0px;
+  transition: outline-color 0.15s ease;
+}
+
+.nav-card:hover {
+  outline-color: #fe5102;
+}
+
+/* Card text and arrow - default vanilla color */
+.nav-card-text,
+.nav-card-arrow {
+  color: var(--color-vanilla);
+}
+
+/* Card text and arrow - Aperol on hover */
+.nav-card:hover .nav-card-text,
+.nav-card:hover .nav-card-arrow {
+  color: #fe5102;
+}
+
+/* Link icon hover effect */
+.link-icon {
+  border-color: var(--color-vanilla);
+  color: var(--color-vanilla);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.link-icon:hover {
+  border-color: #fe5102;
+  color: #fe5102;
+}
+
+/* ============================================
+   FREE RESOURCES - Swipeable Cards
+   ============================================ */
+
+/* CSS Custom Properties for responsive sizing */
+:root {
+  /* Card sizing - mobile first */
+  --resource-card-width: calc((100vw - 48px) / 2); /* 2 cards + 12px gap on mobile */
+  --resource-card-gap: 12px;
+  --resource-card-image-height: 120px;
+  --resource-card-padding: 12px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --resource-card-width: 200px;
+    --resource-card-gap: 14px;
+    --resource-card-image-height: 140px;
+    --resource-card-padding: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --resource-card-width: 260px;
+    --resource-card-gap: 16px;
+    --resource-card-image-height: 160px;
+    --resource-card-padding: 16px;
+  }
+}
+
+/* Scroll wrapper - provides edge-to-edge scrolling */
+.resources-scroll-wrapper {
+  width: 100%;
+  overflow: visible;
+}
+
+/* Scroll container - mobile first */
+.resources-scroll {
+  display: flex;
+  gap: var(--resource-card-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Tablet - start aligning with max-w-800px content */
+@media (min-width: 640px) {
+  .resources-scroll {
+    padding-left: max(16px, calc((100vw - 800px) / 2));
+    padding-right: 16px;
+  }
+}
+
+/* Desktop - full alignment with 800px content area */
+@media (min-width: 1024px) {
+  .resources-scroll {
+    padding-left: max(16px, calc((100vw - 800px) / 2));
+    padding-right: max(16px, calc((100vw - 800px) / 2));
+  }
+}
+
+.resources-scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Resource card - responsive sizing */
+.resource-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: var(--resource-card-width);
+  min-width: 160px;
+  max-width: 280px;
+  background: #fffaee;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect - desktop only */
+@media (min-width: 1024px) {
+  .resource-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(25, 25, 25, 0.12);
+  }
+}
+
+/* Card image area */
+.resource-card-image {
+  height: var(--resource-card-image-height);
+}
+
+/* Card content area */
+.resource-card-content {
+  padding: var(--resource-card-padding);
+}
+
+/* Card title - responsive typography */
+.resource-card-title {
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+@media (min-width: 640px) {
+  .resource-card-title {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .resource-card-title {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
+
+/* Card description - responsive */
+.resource-card-description {
+  font-size: 12px;
+  line-height: 1.4;
+  -webkit-line-clamp: 2;
+}
+
+@media (min-width: 640px) {
+  .resource-card-description {
+    font-size: 12px;
+    line-height: 1.5;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .resource-card-description {
+    font-size: 13px;
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* Card label badge (top-left) */
+.resource-card-label {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+@media (min-width: 640px) {
+  .resource-card-label {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+}
+
+/* Status badges (top-right) */
+.resource-card-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+}
+
+@media (min-width: 640px) {
+  .resource-card-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+
+/* Badges */
+.badge-coming-soon {
+  background: #191919;
+  color: #fffaee;
+}
+
+.badge-live {
+  background: #fe5102;
+  color: white;
+}
+
+/* Card button - responsive */
+.card-button {
+  border: 1px solid #191919;
+  color: #191919;
+  background: transparent;
+  transition: all 0.15s ease;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+@media (min-width: 640px) {
+  .card-button {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+.card-button:hover {
+  background: #191919;
+  color: #fffaee;
+}
