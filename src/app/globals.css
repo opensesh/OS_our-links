@@ -571,3 +571,70 @@ button,
     font-size: 14px;
   }
 }
+
+/* ============================================
+   SUBSCRIBE FORM - Newsletter Signup
+   ============================================ */
+
+/* Subscribe form container */
+.subscribe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .subscribe-form {
+    flex-direction: row;
+  }
+}
+
+/* Subscribe input */
+.subscribe-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  color: var(--fg-primary);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.subscribe-input::placeholder {
+  color: var(--fg-quaternary);
+}
+
+.subscribe-input:focus {
+  outline: none;
+  border-color: var(--border-primary);
+  background: var(--bg-secondary_hover);
+}
+
+/* Subscribe button */
+.subscribe-button {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  background: var(--color-charcoal);
+  color: var(--color-vanilla);
+  border: 1px solid var(--color-charcoal);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.subscribe-button:hover {
+  background: var(--color-vanilla);
+  color: var(--color-charcoal);
+}
+
+/* Hint text below form */
+.subscribe-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--fg-quaternary);
+}
