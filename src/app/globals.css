@@ -176,6 +176,9 @@ button,
 
 /* CSS Custom Properties for responsive sizing */
 :root {
+  /* Content max-width - responsive */
+  --content-max-width: 800px;
+
   /* Card sizing - mobile first */
   --resource-card-width: calc((100vw - 48px) / 2); /* 2 cards + 12px gap on mobile */
   --resource-card-gap: 12px;
@@ -194,10 +197,17 @@ button,
 
 @media (min-width: 1024px) {
   :root {
+    --content-max-width: 1024px;
     --resource-card-width: 260px;
     --resource-card-gap: 16px;
     --resource-card-image-height: 160px;
     --resource-card-padding: 16px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --content-max-width: 1200px;
   }
 }
 
@@ -221,19 +231,19 @@ button,
   padding-right: 16px;
 }
 
-/* Tablet - symmetric padding aligned with max-w-800px content */
+/* Tablet - symmetric padding aligned with content max-width */
 @media (min-width: 640px) {
   .resources-scroll {
-    padding-left: max(16px, calc((100vw - 800px) / 2));
-    padding-right: max(16px, calc((100vw - 800px) / 2));
+    padding-left: max(16px, calc((100vw - var(--content-max-width)) / 2));
+    padding-right: max(16px, calc((100vw - var(--content-max-width)) / 2));
   }
 }
 
-/* Desktop - full alignment with 800px content area */
+/* Desktop - full alignment with content max-width */
 @media (min-width: 1024px) {
   .resources-scroll {
-    padding-left: max(16px, calc((100vw - 800px) / 2));
-    padding-right: max(16px, calc((100vw - 800px) / 2));
+    padding-left: max(16px, calc((100vw - var(--content-max-width)) / 2));
+    padding-right: max(16px, calc((100vw - var(--content-max-width)) / 2));
   }
 }
 
@@ -403,19 +413,19 @@ button,
   padding-right: 16px;
 }
 
-/* Tablet - symmetric padding aligned with max-w-800px content */
+/* Tablet - symmetric padding aligned with content max-width */
 @media (min-width: 640px) {
   .links-scroll {
-    padding-left: max(16px, calc((100vw - 800px) / 2));
-    padding-right: max(16px, calc((100vw - 800px) / 2));
+    padding-left: max(16px, calc((100vw - var(--content-max-width)) / 2));
+    padding-right: max(16px, calc((100vw - var(--content-max-width)) / 2));
   }
 }
 
-/* Desktop - full alignment with 800px content area */
+/* Desktop - full alignment with content max-width */
 @media (min-width: 1024px) {
   .links-scroll {
-    padding-left: max(16px, calc((100vw - 800px) / 2));
-    padding-right: max(16px, calc((100vw - 800px) / 2));
+    padding-left: max(16px, calc((100vw - var(--content-max-width)) / 2));
+    padding-right: max(16px, calc((100vw - var(--content-max-width)) / 2));
   }
 }
 
