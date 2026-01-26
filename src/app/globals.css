@@ -354,8 +354,8 @@ button,
 
 /* Card button - responsive */
 .card-button {
-  border: 1px solid #191919;
-  color: #191919;
+  border: 1px solid var(--border-secondary);
+  color: var(--fg-secondary);
   background: transparent;
   transition: all 0.15s ease;
   padding: 6px 12px;
@@ -377,8 +377,9 @@ button,
 }
 
 .card-button:hover {
-  background: #191919;
-  color: #fffaee;
+  border-color: var(--border-brand);
+  background: var(--bg-tertiary);
+  color: var(--fg-primary);
 }
 
 /* ============================================
