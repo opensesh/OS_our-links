@@ -166,8 +166,8 @@ button,
 }
 
 .link-icon:hover {
-  border-color: #fe5102;
-  color: #fe5102;
+  border-color: var(--border-brand);
+  color: var(--fg-brand-primary);
 }
 
 /* ============================================
@@ -451,7 +451,7 @@ button,
 }
 
 .link-card:hover {
-  border-color: #fe5102 !important;
+  border-color: var(--border-brand) !important;
 }
 
 .link-card .link-card-icon {
@@ -459,6 +459,6 @@ button,
 }
 
 .link-card:hover .link-card-icon {
-  border-color: #fe5102 !important;
-  color: #fe5102 !important;
+  border-color: var(--border-brand) !important;
+  color: var(--fg-brand-primary) !important;
 }
