@@ -343,13 +343,13 @@ button,
 
 /* Badges */
 .badge-coming-soon {
-  background: #191919;
-  color: #fffaee;
+  background: var(--color-charcoal);
+  color: var(--color-vanilla);
 }
 
 .badge-live {
-  background: #fe5102;
-  color: white;
+  background: var(--bg-brand-solid);
+  color: var(--fg-white);
 }
 
 /* Card button - responsive */
