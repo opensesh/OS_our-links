@@ -222,11 +222,11 @@ button,
   padding-right: 16px;
 }
 
-/* Tablet - start aligning with max-w-800px content */
+/* Tablet - symmetric padding aligned with max-w-800px content */
 @media (min-width: 640px) {
   .resources-scroll {
     padding-left: max(16px, calc((100vw - 800px) / 2));
-    padding-right: 16px;
+    padding-right: max(16px, calc((100vw - 800px) / 2));
   }
 }
 
@@ -404,11 +404,11 @@ button,
   padding-right: 16px;
 }
 
-/* Tablet - start aligning with max-w-800px content */
+/* Tablet - symmetric padding aligned with max-w-800px content */
 @media (min-width: 640px) {
   .links-scroll {
     padding-left: max(16px, calc((100vw - 800px) / 2));
-    padding-right: 16px;
+    padding-right: max(16px, calc((100vw - 800px) / 2));
   }
 }
 
