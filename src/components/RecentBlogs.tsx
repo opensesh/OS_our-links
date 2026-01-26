@@ -131,9 +131,9 @@ export function RecentBlogs() {
 
   return (
     <section className="w-full mt-6 sm:mt-8">
-      {/* Heading - aligned with max-w-[800px] content */}
+      {/* Heading - aligned with max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] content */}
       <div className="px-4 mb-3 sm:mb-4">
-        <div className="max-w-[800px] mx-auto">
+        <div className="max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] mx-auto">
           <h2
             className="font-accent text-xl sm:text-2xl lg:text-3xl font-bold"
             style={{ color: "var(--color-vanilla)" }}
@@ -145,7 +145,7 @@ export function RecentBlogs() {
 
       {/* Blog cards - vertical stack within max-width */}
       <div className="px-4">
-        <div className="max-w-[800px] mx-auto flex flex-col gap-3">
+        <div className="max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] mx-auto flex flex-col gap-3">
           {isLoading ? (
             <>
               <BlogCardSkeleton />
@@ -160,7 +160,7 @@ export function RecentBlogs() {
 
       {/* Subscribe form */}
       <div className="px-4 mt-6">
-        <div className="max-w-[800px] mx-auto">
+        <div className="max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] mx-auto">
           <form
             action="https://opensession.substack.com/api/v1/free?nojs=true"
             method="post"
