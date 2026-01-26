@@ -138,13 +138,12 @@ button,
 
 /* CardNav card hover effect */
 .nav-card {
-  outline: 2px solid transparent;
-  outline-offset: 0px;
-  transition: outline-color 0.15s ease;
+  border: 1px solid var(--border-secondary);
+  transition: border-color 0.15s ease;
 }
 
 .nav-card:hover {
-  outline-color: #fe5102;
+  border-color: var(--border-brand);
 }
 
 /* Card text and arrow - default vanilla color */
@@ -153,10 +152,10 @@ button,
   color: var(--color-vanilla);
 }
 
-/* Card text and arrow - Aperol on hover */
+/* Card text and arrow - Brand color on hover */
 .nav-card:hover .nav-card-text,
 .nav-card:hover .nav-card-arrow {
-  color: #fe5102;
+  color: var(--fg-brand-primary);
 }
 
 /* Link icon hover effect */
