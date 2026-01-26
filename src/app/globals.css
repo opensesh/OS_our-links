@@ -379,3 +379,87 @@ button,
   background: #191919;
   color: #fffaee;
 }
+
+/* ============================================
+   OUR LINKS - Swipeable Cards Carousel
+   ============================================ */
+
+/* Scroll wrapper - provides edge-to-edge scrolling */
+.links-scroll-wrapper {
+  width: 100%;
+  overflow: visible;
+}
+
+/* Scroll container */
+.links-scroll {
+  display: flex;
+  gap: 17px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Tablet - start aligning with max-w-800px content */
+@media (min-width: 640px) {
+  .links-scroll {
+    padding-left: max(16px, calc((100vw - 800px) / 2));
+    padding-right: 16px;
+  }
+}
+
+/* Desktop - full alignment with 800px content area */
+@media (min-width: 1024px) {
+  .links-scroll {
+    padding-left: max(16px, calc((100vw - 800px) / 2));
+    padding-right: max(16px, calc((100vw - 800px) / 2));
+  }
+}
+
+.links-scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Link card - ensure 3+ visible with partial 4th */
+.link-card {
+  scroll-snap-align: start;
+  /* Responsive sizing: aim for 3 visible cards minimum */
+  width: calc((100vw - 2rem - 34px) / 3.3);
+  min-width: 100px;
+  max-width: 160px;
+}
+
+/* Larger screens - more cards visible */
+@media (min-width: 640px) {
+  .link-card {
+    width: 130px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .link-card {
+    width: 140px;
+  }
+}
+
+/* Link card hover effect */
+.link-card {
+  transition: border-color 0.15s ease;
+}
+
+.link-card:hover {
+  border-color: #fe5102 !important;
+}
+
+.link-card .link-card-icon {
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.link-card:hover .link-card-icon {
+  border-color: #fe5102 !important;
+  color: #fe5102 !important;
+}
