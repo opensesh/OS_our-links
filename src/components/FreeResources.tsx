@@ -67,7 +67,7 @@ function Badge({ text, variant }: { text: string; variant: "coming-soon" | "live
   return (
     <span
       className={`
-        px-2.5 py-1 text-xs font-medium rounded-full
+        resource-card-badge font-medium rounded-full
         ${variant === "coming-soon" ? "badge-coming-soon" : "badge-live"}
       `}
     >
@@ -80,34 +80,34 @@ function ResourceCardComponent({ card }: { card: ResourceCard }) {
   return (
     <div className="resource-card">
       {/* Image Area */}
-      <div className="relative h-[180px] bg-[#191919] rounded-t-xl overflow-hidden">
+      <div className="resource-card-image relative bg-[#191919] rounded-t-xl overflow-hidden">
         {/* Placeholder dark background - replace with actual images later */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a2a] to-[#191919]" />
 
         {/* Label - Top Left */}
-        <span className="absolute top-3 left-3 px-2 py-0.5 text-xs font-medium bg-white/90 text-[#191919] rounded">
+        <span className="resource-card-label absolute top-2 left-2 sm:top-3 sm:left-3 font-medium bg-white/90 text-[#191919] rounded">
           {card.label}
         </span>
 
         {/* Badge - Top Right */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
           <Badge text={card.badge.text} variant={card.badge.variant} />
         </div>
       </div>
 
       {/* Content Area */}
-      <div className="p-5">
-        <h3 className="font-accent text-lg font-bold text-[#191919] mb-2">
+      <div className="resource-card-content">
+        <h3 className="resource-card-title font-accent font-bold text-[#191919] mb-1.5 sm:mb-2">
           {card.title}
         </h3>
-        <p className="text-sm text-[#191919]/80 leading-relaxed mb-4 line-clamp-3">
+        <p className="resource-card-description text-[#191919]/80 mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
           {card.description}
         </p>
         <a
           href={card.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="card-button inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg"
+          className="card-button inline-flex items-center gap-1.5 sm:gap-2 font-medium rounded-lg"
         >
           Website
           <ExternalLinkIcon />
@@ -119,12 +119,12 @@ function ResourceCardComponent({ card }: { card: ResourceCard }) {
 
 export function FreeResources() {
   return (
-    <section className="w-full mt-8">
-      {/* Heading - aligned with content */}
-      <div className="px-4 mb-4">
+    <section className="w-full mt-6 sm:mt-8">
+      {/* Heading - aligned with max-w-[800px] content */}
+      <div className="px-4 mb-3 sm:mb-4">
         <div className="max-w-[800px] mx-auto">
           <h2
-            className="font-accent text-2xl sm:text-3xl font-bold"
+            className="font-accent text-xl sm:text-2xl lg:text-3xl font-bold"
             style={{ color: "var(--color-vanilla)" }}
           >
             Free Resources
@@ -138,8 +138,6 @@ export function FreeResources() {
           {resourceCards.map((card) => (
             <ResourceCardComponent key={card.id} card={card} />
           ))}
-          {/* Right padding spacer for scroll end */}
-          <div className="flex-shrink-0 w-4 sm:w-0" aria-hidden="true" />
         </div>
       </div>
     </section>
