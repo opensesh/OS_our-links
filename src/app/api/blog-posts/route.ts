@@ -28,7 +28,7 @@ function formatDate(date: Date): string {
 
 function stripHtml(html: string): string {
   return html
-    .replace(/<!\[CDATA\[(.*?)\]\]>/gs, '$1')
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
     .replace(/<[^>]*>/g, '')
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
