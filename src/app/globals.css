@@ -248,10 +248,11 @@ button,
   width: var(--resource-card-width);
   min-width: 160px;
   max-width: 280px;
-  background: #fffaee;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
   border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.15s ease;
 }
 
 /* Hover effect - desktop only */
@@ -259,6 +260,7 @@ button,
   .resource-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(25, 25, 25, 0.12);
+    border-color: var(--border-brand);
   }
 }
 
