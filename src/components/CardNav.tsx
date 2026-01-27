@@ -150,7 +150,7 @@ export function CardNav() {
       )}
 
       <nav className="absolute top-0 left-0 right-0 z-50 w-full px-4 py-4">
-        <div className="max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] mx-auto">
+        <div className="max-w-[var(--content-max-width)] mx-auto">
           <div
             ref={containerRef}
             className="overflow-hidden rounded-2xl shadow-md"
