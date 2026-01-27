@@ -809,3 +809,13 @@ button,
     transform: none;
   }
 }
+
+/* Tech stack SVG icon fill - make visible on dark background */
+.tech-icon-wrapper img[src$=".svg"] {
+  filter: brightness(0) invert(1);
+}
+
+/* PNG icons don't need filter */
+.tech-icon-wrapper img[src$=".png"] {
+  filter: none;
+}
