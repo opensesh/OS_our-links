@@ -638,3 +638,174 @@ button,
   font-size: 12px;
   color: var(--fg-quaternary);
 }
+
+/* ============================================
+   TECH STACK - iOS Command Center Style
+   ============================================ */
+
+/* CSS Custom Properties for tech stack */
+:root {
+  --tech-stack-gap: 10px;
+  --tech-icon-size: 56px;
+  --tech-icon-radius: 12px;
+  --tech-container-radius: 24px;
+  --tech-inner-radius: 20px;
+  --tech-label-radius: 16px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --tech-stack-gap: 12px;
+    --tech-icon-size: 64px;
+    --tech-icon-radius: 14px;
+    --tech-container-radius: 28px;
+    --tech-inner-radius: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --tech-stack-gap: 14px;
+    --tech-icon-size: 68px;
+    --tech-icon-radius: 16px;
+    --tech-container-radius: 32px;
+    --tech-inner-radius: 28px;
+  }
+}
+
+/* Outer wrapper - handles padding alignment */
+.tech-stack-outer {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 640px) {
+  .tech-stack-outer {
+    padding-left: max(16px, calc((100vw - var(--content-max-width)) / 2));
+    padding-right: max(16px, calc((100vw - var(--content-max-width)) / 2));
+  }
+}
+
+/* Glassmorphism outer container */
+.tech-stack-container {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--tech-container-radius);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Inner pill container for icons */
+.tech-stack-inner {
+  background: rgba(69, 69, 69, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--tech-inner-radius);
+  padding: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Scroll container */
+.tech-stack-scroll {
+  display: flex;
+  gap: var(--tech-stack-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 6px;
+}
+
+.tech-stack-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual icon wrapper */
+.tech-icon-wrapper {
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(45, 45, 45, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--tech-icon-radius);
+  padding: 8px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s ease,
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
+  cursor: pointer;
+}
+
+/* Hover state - desktop only */
+@media (min-width: 1024px) {
+  .tech-icon-wrapper:hover {
+    transform: scale(1.15);
+    background: rgba(60, 60, 60, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    position: relative;
+  }
+}
+
+/* Active/pressed state for touch */
+.tech-icon-wrapper:active {
+  transform: scale(0.95);
+}
+
+/* The actual icon image */
+.tech-icon {
+  width: var(--tech-icon-size);
+  height: var(--tech-icon-size);
+  border-radius: calc(var(--tech-icon-radius) - 4px);
+  object-fit: contain;
+}
+
+/* Floating label pill */
+.tech-label-pill {
+  background: #1a1919;
+  border: 1px solid rgba(84, 84, 84, 0.8);
+  border-radius: var(--tech-label-radius);
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-vanilla);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tech-label-pill.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .tech-icon-wrapper {
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .tech-icon-wrapper:hover {
+    transform: none;
+  }
+  
+  .tech-icon-wrapper:active {
+    transform: none;
+  }
+}
