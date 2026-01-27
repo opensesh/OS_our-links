@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef, useState } from "react";
+
 // Icon components - all stroke-based for consistent outline style
 function FigmaIcon() {
   return (
@@ -212,11 +214,22 @@ function LinkCard({ link }: { link: LinkItem }) {
 }
 
 export function OurLinks() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      setScrollProgress(maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0);
+    }
+  };
+
   return (
     <section className="w-full mt-4">
       {/* Heading - aligned with content */}
       <div className="px-4 mb-4">
-        <div className="max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] mx-auto">
+        <div className="max-w-[var(--content-max-width)] mx-auto">
           <h2
             className="font-accent text-xl sm:text-2xl lg:text-3xl font-bold"
             style={{ color: "var(--color-vanilla)" }}
@@ -228,12 +241,26 @@ export function OurLinks() {
 
       {/* Scrollable Cards Container */}
       <div className="links-scroll-wrapper">
-        <div className="links-scroll">
+        <div 
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="links-scroll"
+        >
           {links.map((link) => (
             <LinkCard key={link.id} link={link} />
           ))}
           {/* Right padding spacer for scroll end */}
           <div className="flex-shrink-0 w-4 sm:w-0" aria-hidden="true" />
+        </div>
+        
+        {/* Scroll progress indicator */}
+        <div className="scroll-progress-container">
+          <div className="scroll-progress-track">
+            <div 
+              className="scroll-progress-thumb" 
+              style={{ width: `${scrollProgress}%` }} 
+            />
+          </div>
         </div>
       </div>
     </section>

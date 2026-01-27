@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef, useState } from "react";
+
 // Custom icon component - stroke-based for consistent outline style
 function ExternalLinkIcon() {
   return (
@@ -118,11 +120,22 @@ function ResourceCardComponent({ card }: { card: ResourceCard }) {
 }
 
 export function FreeResources() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      setScrollProgress(maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0);
+    }
+  };
+
   return (
     <section className="w-full mt-6 sm:mt-8">
       {/* Heading - aligned with max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] content */}
       <div className="px-4 mb-3 sm:mb-4">
-        <div className="max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] mx-auto">
+        <div className="max-w-[var(--content-max-width)] mx-auto">
           <h2
             className="font-accent text-xl sm:text-2xl lg:text-3xl font-bold"
             style={{ color: "var(--color-vanilla)" }}
@@ -134,10 +147,24 @@ export function FreeResources() {
 
       {/* Scrollable Cards Container */}
       <div className="resources-scroll-wrapper">
-        <div className="resources-scroll">
+        <div 
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="resources-scroll"
+        >
           {resourceCards.map((card) => (
             <ResourceCardComponent key={card.id} card={card} />
           ))}
+        </div>
+        
+        {/* Scroll progress indicator */}
+        <div className="scroll-progress-container">
+          <div className="scroll-progress-track">
+            <div 
+              className="scroll-progress-thumb" 
+              style={{ width: `${scrollProgress}%` }} 
+            />
+          </div>
         </div>
       </div>
     </section>

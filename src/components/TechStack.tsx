@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 
 interface TechItem {
   id: string;
@@ -108,6 +108,16 @@ function TechIcon({
 
 export function TechStack() {
   const [hoveredName, setHoveredName] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      setScrollProgress(maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0);
+    }
+  }, []);
 
   const handleHover = useCallback((name: string) => {
     setHoveredName(name);
@@ -121,7 +131,7 @@ export function TechStack() {
     <section className="w-full mt-8 sm:mt-10 mb-8">
       {/* Heading - aligned with max-w content */}
       <div className="px-4 mb-4">
-        <div className="max-w-[800px] lg:max-w-[1024px] xl:max-w-[1200px] mx-auto">
+        <div className="max-w-[var(--content-max-width)] mx-auto">
           <h2
             className="font-accent text-xl sm:text-2xl lg:text-3xl font-bold"
             style={{ color: "var(--color-vanilla)" }}
@@ -135,7 +145,11 @@ export function TechStack() {
       <div className="tech-stack-outer">
         <div className="tech-stack-container">
           <div className="tech-stack-inner">
-            <div className="tech-stack-scroll">
+            <div 
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="tech-stack-scroll"
+            >
               {techStack.map((item) => (
                 <TechIcon
                   key={item.id}
@@ -153,6 +167,16 @@ export function TechStack() {
             aria-live="polite"
           >
             {hoveredName || "\u00A0"}
+          </div>
+        </div>
+        
+        {/* Scroll progress indicator */}
+        <div className="scroll-progress-container">
+          <div className="scroll-progress-track">
+            <div 
+              className="scroll-progress-thumb" 
+              style={{ width: `${scrollProgress}%` }} 
+            />
           </div>
         </div>
       </div>
