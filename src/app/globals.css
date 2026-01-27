@@ -176,20 +176,21 @@ button,
 
 /* CSS Custom Properties for responsive sizing */
 :root {
-  /* Content max-width - responsive */
-  --content-max-width: 800px;
+  /* Link-in-bio narrow layout */
+  --content-max-width: 340px;
 
-  /* Card sizing - mobile first */
-  --resource-card-width: calc((100vw - 48px) / 2); /* 2 cards + 12px gap on mobile */
-  --resource-card-gap: 12px;
+  /* Card sizing - mobile first with peek effect */
+  --resource-card-width: calc((var(--content-max-width) - 2rem - 1.5rem) / 2.3);
+  --resource-card-gap: 0.75rem;
   --resource-card-image-height: 120px;
   --resource-card-padding: 12px;
 }
 
 @media (min-width: 640px) {
   :root {
-    --resource-card-width: 200px;
-    --resource-card-gap: 14px;
+    --content-max-width: 540px;
+    --resource-card-width: calc((var(--content-max-width) - 2rem - 1.75rem) / 2.5);
+    --resource-card-gap: 0.875rem;
     --resource-card-image-height: 140px;
     --resource-card-padding: 14px;
   }
@@ -197,17 +198,11 @@ button,
 
 @media (min-width: 1024px) {
   :root {
-    --content-max-width: 1024px;
-    --resource-card-width: 260px;
-    --resource-card-gap: 16px;
+    --content-max-width: 720px;
+    --resource-card-width: calc((var(--content-max-width) - 2rem - 2.25rem) / 3.3);
+    --resource-card-gap: 1rem;
     --resource-card-image-height: 160px;
     --resource-card-padding: 16px;
-  }
-}
-
-@media (min-width: 1280px) {
-  :root {
-    --content-max-width: 1200px;
   }
 }
 
@@ -433,25 +428,28 @@ button,
   display: none; /* Chrome/Safari */
 }
 
-/* Link card - ensure 3+ visible with partial 4th */
+/* Link card - peek effect with partial card visible */
 .link-card {
   scroll-snap-align: start;
-  /* Responsive sizing: aim for 3 visible cards minimum */
-  width: calc((100vw - 2rem - 34px) / 3.3);
-  min-width: 100px;
-  max-width: 160px;
+  /* Show ~3.5 cards with partial 4th for peek effect */
+  width: calc((var(--content-max-width) - 2rem - 51px) / 3.5);
+  min-width: 80px;
+  max-width: 100px;
 }
 
-/* Larger screens - more cards visible */
+/* Tablet - more cards visible */
 @media (min-width: 640px) {
   .link-card {
-    width: 130px;
+    width: calc((var(--content-max-width) - 2rem - 68px) / 4.5);
+    max-width: 95px;
   }
 }
 
+/* Desktop - even more cards */
 @media (min-width: 1024px) {
   .link-card {
-    width: 140px;
+    width: calc((var(--content-max-width) - 2rem - 85px) / 5.5);
+    max-width: 110px;
   }
 }
 
@@ -818,4 +816,35 @@ button,
 /* PNG icons don't need filter */
 .tech-icon-wrapper img[src$=".png"] {
   filter: none;
+}
+
+/* ============================================
+   SCROLL PROGRESS INDICATOR
+   ============================================ */
+
+.scroll-progress-container {
+  padding: 0.75rem 1rem 0;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .scroll-progress-container {
+    padding-left: max(1rem, calc((100vw - var(--content-max-width)) / 2));
+    padding-right: max(1rem, calc((100vw - var(--content-max-width)) / 2));
+  }
+}
+
+.scroll-progress-track {
+  height: 4px;
+  background: var(--border-secondary);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.scroll-progress-thumb {
+  height: 100%;
+  background: var(--fg-tertiary);
+  border-radius: 9999px;
+  transition: width 0.15s ease-out;
 }
