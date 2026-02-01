@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   // Static export for GitHub Pages
   output: "export",
 
+  // GitHub Pages subpath configuration
+  basePath: "/OS_our-links",
+  assetPrefix: "/OS_our-links/",
+
   // Disable image optimization for static export
   images: {
     unoptimized: true,
