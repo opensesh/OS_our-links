@@ -40,9 +40,9 @@ const resourceCards: ResourceCard[] = [
   {
     id: "brand-design-system",
     badge: { text: "Coming Soon", variant: "coming-soon" },
-    mediaDefault: "/images/brand-design-system-01.jpg",
+    mediaDefault: "/OS_our-links/images/brand-design-system-01.jpg",
     mediaType: "image",
-    imageHover: "/images/brand-design-system-02.jpg",
+    imageHover: "/OS_our-links/images/brand-design-system-02.jpg",
     title: "Brand Design System",
     description:
       "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables",
@@ -52,9 +52,9 @@ const resourceCards: ResourceCard[] = [
   {
     id: "design-directory",
     badge: { text: "Live", variant: "live" },
-    mediaDefault: "/images/design-directory-01.mp4",
+    mediaDefault: "/OS_our-links/images/design-directory-01.mp4",
     mediaType: "video",
-    imageHover: "/images/design-directory-02.jpg",
+    imageHover: "/OS_our-links/images/design-directory-02.jpg",
     title: "Design Directory",
     description:
       "All of our favorite tools in an interactive directory, open-source and ready to adapt",
@@ -64,9 +64,9 @@ const resourceCards: ResourceCard[] = [
   {
     id: "portfolio",
     badge: { text: "Live", variant: "live" },
-    mediaDefault: "/images/portfolio-01.jpg",
+    mediaDefault: "/OS_our-links/images/portfolio-01.jpg",
     mediaType: "image",
-    imageHover: "/images/portfolio-02.jpg",
+    imageHover: "/OS_our-links/images/portfolio-02.jpg",
     title: "Portfolio Presentation Template",
     description:
       "Our co-founder's portfolio that helped him land jobs at Google, Salesforce, and other Fortune 500 companies. Open source and ready to customize",
