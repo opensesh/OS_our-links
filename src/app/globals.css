@@ -195,7 +195,7 @@ button,
 
 @media (min-width: 640px) {
   :root {
-    --content-max-width: 448px;
+    --content-max-width: 520px;
     --resource-card-width: calc((var(--content-max-width) - 2rem - 1.75rem) / 2.5);
     --resource-card-gap: 0.875rem;
     --resource-card-image-height: 140px;
@@ -205,7 +205,7 @@ button,
 
 @media (min-width: 1024px) {
   :root {
-    --content-max-width: 560px;
+    --content-max-width: 720px;
     --resource-card-width: calc((var(--content-max-width) - 2rem - 2.25rem) / 3.3);
     --resource-card-gap: 1rem;
     --resource-card-image-height: 160px;
