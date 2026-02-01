@@ -47,16 +47,6 @@ export default function RootLayout({
             pageLoadAnimation={true}
           />
         </div>
-        {/* Scroll mask - hides content in the gap above sticky nav */}
-        <div
-          className="fixed top-0 left-0 right-0 z-30 pointer-events-none"
-          aria-hidden="true"
-          style={{
-            height: '56px',
-            background:
-              'linear-gradient(to bottom, rgba(25,25,25,1) 0%, rgba(25,25,25,1) 60%, rgba(25,25,25,0) 100%)',
-          }}
-        />
         {/* Content layer - above background */}
         <div className="relative z-10">{children}</div>
       </body>
