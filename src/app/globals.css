@@ -700,6 +700,29 @@ button,
    TECH STACK - iOS Command Center Style
    ============================================ */
 
+/* CSS Custom Properties for link icons (Our Links section) */
+:root {
+  --link-icon-size: 18px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --link-icon-size: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --link-icon-size: 22px;
+  }
+}
+
+/* Link icon SVG sizing */
+.link-icon-svg {
+  width: var(--link-icon-size);
+  height: var(--link-icon-size);
+}
+
 /* CSS Custom Properties for tech stack */
 :root {
   --tech-stack-gap: 8px;

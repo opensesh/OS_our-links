@@ -25,8 +25,7 @@ function getServerCarouselModeSnapshot() {
 function FigmaIcon() {
   return (
     <svg
-      width="13"
-      height="13"
+      className="link-icon-svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -46,8 +45,7 @@ function FigmaIcon() {
 function GitHubIcon() {
   return (
     <svg
-      width="13"
-      height="13"
+      className="link-icon-svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -63,8 +61,7 @@ function GitHubIcon() {
 function SubstackIcon() {
   return (
     <svg
-      width="13"
-      height="13"
+      className="link-icon-svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -82,8 +79,7 @@ function SubstackIcon() {
 function InstagramIcon() {
   return (
     <svg
-      width="13"
-      height="13"
+      className="link-icon-svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -101,8 +97,7 @@ function InstagramIcon() {
 function MediumIcon() {
   return (
     <svg
-      width="13"
-      height="13"
+      className="link-icon-svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
