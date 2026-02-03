@@ -1,0 +1,56 @@
+Plan: Fix Nav Card Header Width Alignment
+Problem
+On desktop viewports, scrolling content appears cut off on the left side of the nav card header. This happens because of a centering mismatch:
+
+CardNav padding structure:
+
+Outer nav: left-0 right-0 px-4 (full viewport with 16px padding = viewport - 32px)
+Inner div: max-w-[var(--content-max-width)] centered within viewport - 32px
+Content sections padding structure (OurLinks, FreeResources, RecentBlogs):
+
+Main: px-4 (viewport - 32px content area)
+Section: w-full px-4 (takes main's width, adds another 32px of padding)
+Inner div: max-w-[var(--content-max-width)] centered within viewport - 64px
+The nav card is centered within viewport - 32px, while content sections are centered within viewport - 64px. This creates a 16px horizontal offset where content appears closer to the left edge than the nav card.
+
+Solution
+Remove the redundant px-4 from content sections. Main already provides horizontal padding, so the sections don't need their own. This aligns both nav and content to be centered within viewport - 32px.
+
+Files to Modify
+1. OurLinks.tsx
+
+- <section className="w-full mt-4 px-4">
++ <section className="w-full mt-4">
+2. FreeResources.tsx
+
+- <section className="w-full mt-6 sm:mt-8 px-4">
++ <section className="w-full mt-6 sm:mt-8">
+3. RecentBlogs.tsx
+
+- <section className="w-full mt-6 sm:mt-8 px-4">
++ <section className="w-full mt-6 sm:mt-8">
+4. TechStack.tsx - No changes needed
+TechStack already has the correct structure - it does not have px-4 on the section element. Instead it has px-4 on inner divs that wrap the max-width containers, which is the pattern the other components should follow. However, since main provides padding, removing section-level padding from the other components will achieve alignment.
+
+Verification
+Run dev server: bun dev
+Open http://localhost:3000 on a wide desktop viewport (1200px+)
+Scroll the page and verify that content no longer appears cut off on the sides of the nav card header
+Test on multiple viewport widths (768px, 1024px, 1440px) to ensure responsive behavior is preserved
+Test mobile viewport to ensure layout still works correctly
+Risk Assessment
+Low risk: Only removing redundant padding that was causing misalignment
+Main already provides px-4 padding, so content will still have proper horizontal spacing
+TechStack already uses this pattern successfully
+
+
+Update Todos
+
+Remove px-4 from OurLinks section
+
+Remove px-4 from FreeResources section
+
+Remove px-4 from RecentBlogs section
+
+Commit changes
+
