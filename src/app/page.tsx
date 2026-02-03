@@ -1,4 +1,5 @@
 import { CardNav } from "@/components/CardNav";
+import { Footer } from "@/components/Footer";
 import { OurLinks } from "@/components/OurLinks";
 import { FreeResources } from "@/components/FreeResources";
 import { RecentBlogs } from "@/components/RecentBlogs";
@@ -25,6 +26,7 @@ export default function Home() {
             <RecentBlogs />
             <TechStack />
           </main>
+          <Footer />
         </div>
       </div>
     </div>
