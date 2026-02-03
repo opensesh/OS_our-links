@@ -218,7 +218,7 @@ export function OurLinks() {
   };
 
   return (
-    <section className="w-full mt-4 px-4">
+    <section className="w-full mt-4">
       {/* Container with max-width */}
       <div className="max-w-[var(--content-max-width)] mx-auto">
         {/* Heading - Neue Haas Grotesk */}
@@ -286,7 +286,7 @@ export function OurLinks() {
                     >
                       {link.title}
                     </span>
-                    <span className="text-[9px] leading-tight truncate text-[var(--color-vanilla)]/70">
+                    <span className="text-[11px] leading-tight truncate text-[var(--color-vanilla)]/70">
                       {link.handle}
                     </span>
                   </div>
@@ -343,7 +343,7 @@ export function OurLinks() {
                   >
                     {link.title}
                   </span>
-                  <span className="text-[9px] leading-tight truncate text-[var(--color-vanilla)]/70">
+                  <span className="text-[11px] leading-tight truncate text-[var(--color-vanilla)]/70">
                     {link.handle}
                   </span>
                 </div>

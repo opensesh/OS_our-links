@@ -1,0 +1,56 @@
+Typography Comparison: OS_our-links vs BOS-3.0
+Font Families ✅ Aligned
+Both use the same fonts:
+
+Category	OS_our-links	BOS-3.0
+Primary	Neue Haas Grotesk Display Pro	Neue Haas Grotesk Display Pro
+Body	Neue Haas Grotesk Display Pro	Neue Haas Grotesk Text Pro
+Accent	Offbit	Offbit
+Note: BOS-3.0 distinguishes between Display Pro and Text Pro variants, while OS_our-links uses Display Pro for everything.
+
+Typography Scale ⚠️ Key Differences
+Element	OS_our-links	BOS-3.0	Status
+H1	Not defined	2.5rem (40px)	❌ Missing
+H2/Section	1.25rem (20px)	2rem (32px)	⚠️ Smaller
+H3	Not defined	1.5rem (24px)	❌ Missing
+H4	Not defined	1.25rem (20px)	❌ Missing
+Body	14-16px (responsive)	1rem (16px)	⚠️ Smaller on mobile
+Small/Meta	10-13px (responsive)	0.875rem (14px)	⚠️ Smaller
+Tiny (handles)	9px	Not in system	❌ Too small
+Specific Discrepancies
+1. Card Title Sizes
+
+Context	OS_our-links	BOS-3.0 Standard
+Mobile	14px	16px
+Tablet	15px	16px
+Desktop	16px	16px
+2. Description Text
+
+Context	OS_our-links	BOS-3.0 Standard
+Mobile	12px	14px
+Tablet	12-13px	14px
+Desktop	13-14px	14px
+3. Metadata/Small Text
+
+Context	OS_our-links	BOS-3.0 Standard
+Mobile	10px	14px
+Tablet	11px	14px
+Desktop	12px	14px
+Line Heights
+Type	OS_our-links	BOS-3.0	Status
+Headings	1.3-1.4	1.2-1.3	✅ Close
+Body	1.4-1.5	1.7-1.75	⚠️ Tighter
+Small text	1.0 (tight)	1.5-1.6	❌ Much tighter
+Recommendations
+Text is too small in OS_our-links, especially on mobile. Here's what I suggest:
+
+Increase mobile minimum text size from 10px → 12px minimum (accessibility)
+Align body text to 15-16px base instead of 14px on mobile
+Increase description text from 12px → 14px minimum
+Avoid 9px text - the handle text at 9px is too small; use 11px minimum
+Increase line height for body content from 1.4 → 1.6 for better readability
+Would you like me to update the typography values in OS_our-links to align with BOS-3.0's system? I can adjust globals.css to:
+
+Increase the minimum text sizes
+Align the responsive scale to match BOS-3.0
+Improve line heights for readability

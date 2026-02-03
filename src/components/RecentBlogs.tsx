@@ -156,7 +156,7 @@ export function RecentBlogs() {
   }
 
   return (
-    <section className="w-full mt-6 sm:mt-8 px-4">
+    <section className="w-full mt-6 sm:mt-8">
       {/* Container with max-width */}
       <div className="max-w-[var(--content-max-width)] mx-auto">
         {/* Heading - Neue Haas Grotesk */}

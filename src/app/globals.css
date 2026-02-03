@@ -1,53 +1,32 @@
+/* Import brand styles from lib/brand-styles */
+@import "../lib/brand-styles/brand.css";
+@import "../lib/brand-styles/typography.css";
 @import "./theme.css";
 @import "tailwindcss";
 
-/* Font Declarations */
-@font-face {
-  font-family: "Offbit";
-  src: url("/OS_our-links/fonts/OffBit-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Offbit";
-  src: url("/OS_our-links/fonts/OffBit-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src: url("/OS_our-links/fonts/NeueHaasDisplayRoman.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src: url("/OS_our-links/fonts/NeueHaasDisplayMedium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src: url("/OS_our-links/fonts/NeueHaasDisplayBold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* Tailwind 4 Theme Configuration */
 @theme inline {
-  /* Typography */
+  /* Typography - Font families */
   --font-sans: "Neue Haas Grotesk Display Pro", system-ui, sans-serif;
   --font-display: "Neue Haas Grotesk Display Pro", system-ui, sans-serif;
   --font-accent: "Offbit", "Neue Haas Grotesk Display Pro", sans-serif;
+
+  /* Typography - Font sizes (from BOS-3.0) */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 2rem;        /* 32px */
+  --font-size-4xl: 2.5rem;      /* 40px */
+
+  /* Typography - Line heights */
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 1.75;
 
   /* Colors - Semantic tokens mapped from CSS variables */
   --color-bg-primary: var(--bg-primary);
@@ -286,69 +265,76 @@ button,
   padding: var(--resource-card-padding);
 }
 
-/* Card title - responsive typography */
+/* Card title - responsive typography (BOS-3.0 aligned) */
 .resource-card-title {
-  font-size: 14px;
-  line-height: 1.3;
-}
-
-@media (min-width: 640px) {
-  .resource-card-title {
-    font-size: 15px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .resource-card-title {
-    font-size: 16px;
-    line-height: 1.4;
-  }
-}
-
-/* Card description - responsive */
-.resource-card-description {
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: var(--text-card-title-sm); /* 15px */
+  line-height: var(--leading-heading);  /* 1.3 */
+  display: -webkit-box;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .resource-card-title {
+    font-size: var(--text-card-title-sm); /* 15px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .resource-card-title {
+    font-size: var(--text-card-title); /* 16px */
+    line-height: var(--leading-small); /* 1.4 */
+  }
+}
+
+/* Card description - responsive (BOS-3.0 aligned) */
+.resource-card-description {
+  font-size: var(--text-card-description-sm); /* 13px */
+  line-height: var(--leading-small); /* 1.4 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @media (min-width: 640px) {
   .resource-card-description {
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: var(--text-card-description-sm); /* 13px */
+    line-height: var(--leading-body); /* 1.5 */
     -webkit-line-clamp: 3;
   }
 }
 
 @media (min-width: 1024px) {
   .resource-card-description {
-    font-size: 13px;
+    font-size: var(--text-card-description); /* 14px */
     -webkit-line-clamp: 3;
   }
 }
 
-/* Card label badge (top-left) */
+/* Card label badge (top-left) - min 11px for a11y */
 .resource-card-label {
-  font-size: 10px;
+  font-size: var(--text-xxs); /* 11px - minimum */
   padding: 2px 6px;
 }
 
 @media (min-width: 640px) {
   .resource-card-label {
-    font-size: 11px;
+    font-size: var(--text-xs); /* 12px */
     padding: 2px 8px;
   }
 }
 
-/* Status badges (top-right) */
+/* Status badges (top-right) - min 11px for a11y */
 .resource-card-badge {
-  font-size: 10px;
+  font-size: var(--text-xxs); /* 11px - minimum */
   padding: 3px 8px;
 }
 
 @media (min-width: 640px) {
   .resource-card-badge {
-    font-size: 11px;
+    font-size: var(--text-xs); /* 12px */
     padding: 4px 10px;
   }
 }
@@ -554,23 +540,31 @@ button,
   height: var(--blog-card-image-size, 80px);
 }
 
-/* Blog card typography - responsive */
+/* Blog card typography - responsive (BOS-3.0 aligned) */
 .blog-card-title {
-  font-size: 14px;
-  line-height: 1.3;
+  font-size: var(--text-card-title-sm); /* 15px */
+  line-height: var(--leading-heading);  /* 1.3 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .blog-card-date {
-  font-size: 10px;
+  font-size: var(--text-xxs); /* 11px - minimum for a11y */
 }
 
 .blog-card-author {
-  font-size: 10px;
+  font-size: var(--text-xxs); /* 11px - minimum for a11y */
 }
 
 .blog-card-description {
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: var(--text-card-description-sm); /* 13px */
+  line-height: var(--leading-small); /* 1.4 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @media (min-width: 640px) {
@@ -584,20 +578,20 @@ button,
   }
 
   .blog-card-title {
-    font-size: 15px;
+    font-size: var(--text-card-title-sm); /* 15px */
   }
 
   .blog-card-date {
-    font-size: 11px;
+    font-size: var(--text-xs); /* 12px */
   }
 
   .blog-card-author {
-    font-size: 11px;
+    font-size: var(--text-xs); /* 12px */
   }
 
   .blog-card-description {
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: var(--text-card-description-sm); /* 13px */
+    line-height: var(--leading-body); /* 1.5 */
   }
 }
 
@@ -612,20 +606,20 @@ button,
   }
 
   .blog-card-title {
-    font-size: 16px;
-    line-height: 1.4;
+    font-size: var(--text-card-title); /* 16px */
+    line-height: var(--leading-small); /* 1.4 */
   }
 
   .blog-card-date {
-    font-size: 12px;
+    font-size: var(--text-xs); /* 12px */
   }
 
   .blog-card-author {
-    font-size: 12px;
+    font-size: var(--text-xs); /* 12px */
   }
 
   .blog-card-description {
-    font-size: 14px;
+    font-size: var(--text-card-description); /* 14px */
   }
 }
 
