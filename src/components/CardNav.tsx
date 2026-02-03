@@ -172,7 +172,7 @@ export function CardNav() {
         onClick={() => setIsOpen(false)}
       />
 
-      <nav className="sticky top-4 z-50 w-full px-4 mt-4">
+      <nav className="w-full">
         <div className="max-w-[var(--content-max-width)] mx-auto">
           <div
             ref={containerRef}
