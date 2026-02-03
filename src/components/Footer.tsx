@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="w-full bg-[var(--color-charcoal)] mt-8 py-12">
+    <footer className="w-[calc(100%+2*clamp(1rem,4vw,3rem))] -mx-[clamp(1rem,4vw,3rem)] bg-[var(--color-charcoal)] mt-8 py-12">
       {/* Content container - matches NavCard max-width */}
       <div className="max-w-[var(--content-max-width)] mx-auto px-4">
         <div className="flex flex-col sm:flex-row justify-between gap-8">
