@@ -122,6 +122,11 @@ button,
   background: var(--color-gray-500);
 }
 
+/* Utility for overflow: clip (not in Tailwind by default) */
+.overflow-clip {
+  overflow: clip;
+}
+
 /* CardNav card hover effect */
 .nav-card {
   border: 1px solid var(--border-secondary);

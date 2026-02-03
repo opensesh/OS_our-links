@@ -7,14 +7,14 @@ import { TechStack } from "@/components/TechStack";
 export default function Home() {
   return (
     <div className="min-h-screen relative">
-      {/* Single scroll container with nav inside - shared scroll context for alignment */}
-      <div className="fixed inset-0 z-10 overflow-y-auto overflow-x-hidden px-[clamp(1rem,4vw,3rem)]">
-        {/* Sticky header wrapper - transparent to show animated background */}
-        <div className="sticky top-0 z-50 pt-4">
-          <CardNav />
-        </div>
-        {/* Clip wrapper - crops top 16px so content doesn't show in header gap */}
-        <div className="-mt-4 pt-4 [clip-path:inset(1rem_0_0_0)]">
+      {/* CLIPPER - fixed viewport window, excludes top 16px */}
+      <div className="fixed left-0 right-0 top-4 h-[calc(100%-1rem)] z-10 overflow-clip">
+        {/* SCROLLER - fills clipper, handles scrolling */}
+        <div className="h-full overflow-y-auto overflow-x-hidden px-[clamp(1rem,4vw,3rem)]">
+          {/* Sticky header - sticks to top of scroller */}
+          <div className="sticky top-0 z-50">
+            <CardNav />
+          </div>
           <main className="flex flex-col items-center pt-4 pb-6 gap-4 sm:gap-6 px-2">
             <OurLinks />
             <FreeResources />
