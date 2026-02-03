@@ -167,6 +167,9 @@ button,
 
 /* CSS Custom Properties for responsive sizing */
 :root {
+  /* Clip boundary - aligns with NavCard bottom */
+  --clip-top: 76px;
+
   /* Link-in-bio narrow layout */
   --content-max-width: 448px;
 
