@@ -1,9 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, FormEvent } from "react";
-import { X } from "lucide-react";
+import { useState, useEffect, FormEvent, useCallback } from "react";
+import { X, Check, Copy } from "lucide-react";
 import { ShuffleText } from "./ShuffleText";
+
+// localStorage key for resource access persistence
+const STORAGE_KEY = "os_resource_access";
 
 interface SubscribeModalProps {
   isOpen: boolean;
@@ -11,6 +14,32 @@ interface SubscribeModalProps {
   onSkip: () => void;
   resourceTitle: string;
   resourceHref: string;
+}
+
+// Save to localStorage that user has accessed resources
+function saveResourceAccess(method: "subscribe" | "skip") {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        accessed: true,
+        method,
+        timestamp: Date.now(),
+      })
+    );
+  } catch {
+    // localStorage may be unavailable (private browsing, etc.)
+  }
+}
+
+// Check if user has already accessed resources
+export function hasResourceAccess(): boolean {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored).accessed === true : false;
+  } catch {
+    return false;
+  }
 }
 
 export function SubscribeModal({
@@ -23,6 +52,7 @@ export function SubscribeModal({
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   // Body scroll lock
   useEffect(() => {
@@ -66,23 +96,51 @@ export function SubscribeModal({
     form.submit();
     document.body.removeChild(form);
 
-    // Show success state briefly, then redirect
+    // Save to localStorage so user won't see modal again
+    saveResourceAccess("subscribe");
+
+    // Show success state with resource link (user clicks to access)
     setIsSubscribed(true);
-    setTimeout(() => {
-      window.open(resourceHref, "_blank", "noopener,noreferrer");
-      handleReset();
-    }, 1500);
+    setIsSubmitting(false);
   };
 
   const handleSkip = () => {
+    // Save to localStorage so user won't see modal again
+    saveResourceAccess("skip");
     window.open(resourceHref, "_blank", "noopener,noreferrer");
     onSkip();
   };
+
+  const handleAccessResource = () => {
+    window.open(resourceHref, "_blank", "noopener,noreferrer");
+    handleReset();
+  };
+
+  const handleCopyLink = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(resourceHref);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch {
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement("textarea");
+      textArea.value = resourceHref;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-9999px";
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    }
+  }, [resourceHref]);
 
   const handleReset = () => {
     setEmail("");
     setIsSubscribed(false);
     setIsSubmitting(false);
+    setLinkCopied(false);
     onClose();
   };
 
@@ -162,14 +220,54 @@ export function SubscribeModal({
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="py-8"
+                    className="space-y-4"
                   >
-                    <p className="text-[var(--fg-brand-primary)] font-medium">
-                      Thanks for subscribing!
-                    </p>
-                    <p className="text-sm text-[var(--fg-tertiary)] mt-1">
-                      Opening resource...
-                    </p>
+                    {/* Success checkmark */}
+                    <div className="flex justify-center mb-2">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", damping: 15, stiffness: 300, delay: 0.1 }}
+                        className="w-12 h-12 rounded-full bg-[var(--bg-brand-solid)]/10 flex items-center justify-center"
+                      >
+                        <Check className="w-6 h-6 text-[var(--fg-brand-primary)]" />
+                      </motion.div>
+                    </div>
+
+                    <div>
+                      <p className="text-[var(--fg-brand-primary)] font-medium">
+                        Thanks for subscribing!
+                      </p>
+                      <p className="text-sm text-[var(--fg-tertiary)] mt-1">
+                        You&apos;re all set. Access your resource below.
+                      </p>
+                    </div>
+
+                    {/* Primary: Access Resource button */}
+                    <button
+                      onClick={handleAccessResource}
+                      className="subscribe-button w-full bg-[var(--bg-brand-solid)] hover:bg-[var(--bg-brand-solid-hover)] text-white border-transparent"
+                    >
+                      Access {resourceTitle}
+                    </button>
+
+                    {/* Secondary: Copy Link button */}
+                    <button
+                      onClick={handleCopyLink}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-[var(--fg-secondary)] hover:text-[var(--fg-primary)] transition-colors"
+                    >
+                      {linkCopied ? (
+                        <>
+                          <Check className="w-4 h-4 text-[var(--fg-brand-primary)]" />
+                          <span className="text-[var(--fg-brand-primary)]">Link copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4" />
+                          <span>Copy link</span>
+                        </>
+                      )}
+                    </button>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">

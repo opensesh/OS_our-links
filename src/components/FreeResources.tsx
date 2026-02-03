@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { SubscribeModal } from "./SubscribeModal";
+import { SubscribeModal, hasResourceAccess } from "./SubscribeModal";
 
 // Custom icon component - stroke-based for consistent outline style
 function ExternalLinkIcon() {
@@ -193,6 +193,12 @@ export function FreeResources() {
   }>({ isOpen: false, card: null });
 
   const handleCardClick = (card: ResourceCard) => {
+    // If user has already subscribed or skipped, open resource directly
+    if (hasResourceAccess()) {
+      window.open(card.href, "_blank", "noopener,noreferrer");
+      return;
+    }
+    // Otherwise show the subscribe modal
     setModalState({ isOpen: true, card });
   };
 
@@ -202,7 +208,7 @@ export function FreeResources() {
 
   return (
     <>
-      <section className="w-full mt-6 sm:mt-8 px-4">
+      <section className="w-full mt-6 sm:mt-8">
         {/* Container with max-width */}
         <div className="max-w-[var(--content-max-width)] mx-auto">
           {/* Heading - Neue Haas Grotesk */}
