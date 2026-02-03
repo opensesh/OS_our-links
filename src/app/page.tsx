@@ -7,8 +7,8 @@ import { TechStack } from "@/components/TechStack";
 export default function Home() {
   return (
     <div className="min-h-screen relative">
-      {/* CLIPPER - fixed viewport window, clips at 32px from top */}
-      <div className="fixed left-0 right-0 top-8 h-[calc(100%-2rem)] z-10 overflow-clip">
+      {/* CLIPPER - fixed viewport window, excludes top 16px */}
+      <div className="fixed left-0 right-0 top-4 h-[calc(100%-1rem)] z-10 overflow-clip">
         {/* SCROLLER - fills clipper, handles scrolling */}
         <div className="h-full overflow-y-auto overflow-x-hidden px-[clamp(1rem,4vw,3rem)]">
           {/* Sticky header - sticks to top of scroller */}
