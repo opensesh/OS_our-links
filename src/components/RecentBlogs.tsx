@@ -119,7 +119,7 @@ export function RecentBlogs() {
     async function loadPosts() {
       try {
         // Use rss2json.com API for CORS-friendly RSS fetching
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS_URL)}&count=3`;
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS_URL)}`;
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("Failed to fetch");
         const data: RssResponse = await response.json();
