@@ -1,3 +1,5 @@
+import { ArrowUpRight } from "lucide-react";
+
 export function Footer() {
   return (
     <footer className="w-[calc(100%+2*clamp(1rem,4vw,3rem))] -mx-[clamp(1rem,4vw,3rem)] bg-[var(--color-charcoal)] mt-8 py-12">
@@ -9,7 +11,16 @@ export function Footer() {
             <p className="text-[var(--color-vanilla)]/70 text-sm font-medium leading-relaxed">
               Transform your brand. Leverage AI.
               <br />
-              Bring bold ideas to life. Start here.
+              Bring bold ideas to life.{" "}
+              <a
+                href="https://opensession.co"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-0.5 text-[var(--color-aperol)] hover:underline underline-offset-2 transition-all"
+              >
+                Start here
+                <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+              </a>
             </p>
             <a
               href="mailto:hello@opensession.co"
