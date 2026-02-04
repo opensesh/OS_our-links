@@ -8,6 +8,12 @@ const GA_MEASUREMENT_ID = "G-VCQFSDNWJN";
 export const metadata: Metadata = {
   title: "Our Links - Open Session",
   description: "Link sharing for Open Session",
+  icons: {
+    icon: [
+      { url: "/OS_our-links/favicon.svg", type: "image/svg+xml" },
+      { url: "/OS_our-links/favicon.png", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({
