@@ -18,10 +18,11 @@ interface RssItem {
   title: string;
   link: string;
   description: string;
+  content: string;
   pubDate: string;
   author: string;
   thumbnail: string;
-  enclosure?: { link: string };
+  enclosure?: { link: string; type?: string };
 }
 
 interface RssResponse {
@@ -48,6 +49,50 @@ function stripHtml(html: string): string {
     .replace(/&#39;/g, "'")
     .replace(/&nbsp;/g, " ")
     .trim();
+}
+
+function extractImageFromHtml(html: string): string | null {
+  if (!html) return null;
+
+  // Look for img tags with src attribute (supports srcset too)
+  const imgMatch = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (imgMatch?.[1]) {
+    // Clean up Substack CDN URLs - remove size constraints for better quality
+    let url = imgMatch[1];
+    // Substack images often have /w_xx,c_limit/ - we can request a reasonable size
+    if (url.includes("substackcdn.com")) {
+      url = url.replace(/\/w_\d+,c_limit\//, "/w_400,c_limit/");
+    }
+    return url;
+  }
+
+  return null;
+}
+
+function getImageUrl(item: RssItem): string | null {
+  // Priority 1: Explicit thumbnail
+  if (item.thumbnail) {
+    return item.thumbnail;
+  }
+
+  // Priority 2: Enclosure if it's an image (not audio/video)
+  if (item.enclosure?.link && item.enclosure.type?.startsWith("image/")) {
+    return item.enclosure.link;
+  }
+
+  // Priority 3: Extract first image from content HTML
+  const contentImage = extractImageFromHtml(item.content);
+  if (contentImage) {
+    return contentImage;
+  }
+
+  // Priority 4: Try description HTML
+  const descImage = extractImageFromHtml(item.description);
+  if (descImage) {
+    return descImage;
+  }
+
+  return null;
 }
 
 function BlogCard({ post }: { post: BlogPost }) {
@@ -119,7 +164,9 @@ export function RecentBlogs() {
     async function loadPosts() {
       try {
         // Use rss2json.com API for CORS-friendly RSS fetching
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS_URL)}`;
+        // Add cache-busting timestamp to get fresh data (updates hourly)
+        const cacheBuster = Math.floor(Date.now() / 3600000); // Changes every hour
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS_URL)}&_=${cacheBuster}`;
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("Failed to fetch");
         const data: RssResponse = await response.json();
@@ -136,7 +183,7 @@ export function RecentBlogs() {
             (item.description.length > 200 ? "..." : ""),
           date: formatDate(item.pubDate),
           author: item.author || "Open Session",
-          imageUrl: item.thumbnail || item.enclosure?.link || null,
+          imageUrl: getImageUrl(item),
           link: item.link,
         }));
 
