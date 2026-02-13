@@ -1,12 +1,14 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
   // Static export for GitHub Pages
   output: "export",
 
-  // GitHub Pages subpath configuration
-  basePath: "/OS_our-links",
-  assetPrefix: "/OS_our-links/",
+  // GitHub Pages subpath configuration (only in production)
+  basePath: isProd ? "/OS_our-links" : "",
+  assetPrefix: isProd ? "/OS_our-links/" : "",
 
   // Disable image optimization for static export
   images: {

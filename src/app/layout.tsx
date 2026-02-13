@@ -7,12 +7,35 @@ const GA_MEASUREMENT_ID = "G-VCQFSDNWJN";
 
 export const metadata: Metadata = {
   title: "Our Links - Open Session",
-  description: "Link sharing for Open Session",
+  description: "Design systems, AI advice, and insights from Fortune 500 veterans. Free resources, templates, and tools for designers and developers.",
   icons: {
     icon: [
-      { url: "/OS_our-links/favicon.svg", type: "image/svg+xml" },
-      { url: "/OS_our-links/favicon.png", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", type: "image/png" },
     ],
+  },
+  metadataBase: new URL("https://opensesh.github.io/OS_our-links"),
+  openGraph: {
+    title: "Link Portal - Open Session",
+    description: "Design systems, AI advice, and insights from Fortune 500 veterans. Free resources, templates, and tools for designers and developers.",
+    url: "https://opensesh.github.io/OS_our-links",
+    siteName: "Open Session",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Open Session Link Portal",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Link Portal - Open Session",
+    description: "Design systems, AI advice, and insights from Fortune 500 veterans. Free resources, templates, and tools.",
+    images: ["/og-image.jpg"],
   },
 };
 
