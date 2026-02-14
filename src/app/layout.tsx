@@ -5,13 +5,16 @@ import { FaultyTerminal } from "@/components/FaultyTerminal";
 
 const GA_MEASUREMENT_ID = "G-VCQFSDNWJN";
 
+// GitHub Pages deploys to /OS_our-links/ subpath in production
+const BASE_PATH = process.env.NODE_ENV === "production" ? "/OS_our-links" : "";
+
 export const metadata: Metadata = {
   title: "Our Links - Open Session",
   description: "Design systems, AI advice, and insights from Fortune 500 veterans. Free resources, templates, and tools for designers and developers.",
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.png", type: "image/png" },
+      { url: `${BASE_PATH}/favicon.svg`, type: "image/svg+xml" },
+      { url: `${BASE_PATH}/favicon.png`, type: "image/png" },
     ],
   },
   metadataBase: new URL("https://opensesh.github.io/OS_our-links"),
