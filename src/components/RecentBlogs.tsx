@@ -121,20 +121,23 @@ function BlogCard({ post }: { post: BlogPost }) {
       rel="noopener noreferrer"
       className="blog-card group flex flex-col sm:flex-row gap-3 sm:gap-4"
     >
-      {/* Image - full width on mobile, fixed on desktop, with padding to prevent cropping */}
-      <div className="w-full sm:w-48 aspect-video relative flex-shrink-0 rounded-lg overflow-hidden bg-[#2a2a2a] p-2 sm:p-3">
-        {post.imageUrl ? (
-          <img
-            src={post.imageUrl}
-            alt=""
-            className="w-full h-full object-contain rounded"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-[var(--fg-quaternary)]">
-            <span className="text-xl font-bold font-accent">OS</span>
-          </div>
-        )}
+      {/* Outer container - padding + background color */}
+      <div className="w-full sm:w-48 flex-shrink-0 rounded-lg bg-[#2a2a2a] p-2 sm:p-3">
+        {/* Inner container - true 16:9 aspect ratio with rounded corners */}
+        <div className="w-full aspect-video rounded overflow-hidden">
+          {post.imageUrl ? (
+            <img
+              src={post.imageUrl}
+              alt=""
+              className="w-full h-full object-contain"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-[var(--fg-quaternary)]">
+              <span className="text-xl font-bold font-accent">OS</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Content */}
