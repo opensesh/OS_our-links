@@ -34,7 +34,7 @@ interface RssResponse {
 async function fetchOgImage(postUrl: string): Promise<string | null> {
   try {
     // Use allorigins as a CORS proxy
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(postUrl)}`;
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(postUrl)}&_=${Date.now()}`;
     const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
     if (!response.ok) return null;
 
@@ -129,7 +129,7 @@ function BlogCard({ post }: { post: BlogPost }) {
             <img
               src={post.imageUrl}
               alt=""
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain rounded"
               loading="lazy"
             />
           ) : (
