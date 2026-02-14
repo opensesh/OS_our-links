@@ -30,6 +30,24 @@ interface RssResponse {
   items: RssItem[];
 }
 
+// Fetch og:image from a post URL using CORS proxy
+async function fetchOgImage(postUrl: string): Promise<string | null> {
+  try {
+    // Use allorigins as a CORS proxy
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(postUrl)}`;
+    const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) return null;
+
+    const html = await response.text();
+    // Match og:image meta tag (handles both quote styles and attribute order)
+    const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+                    html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    return ogMatch?.[1] || null;
+  } catch {
+    return null;
+  }
+}
+
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-US", {
@@ -103,8 +121,8 @@ function BlogCard({ post }: { post: BlogPost }) {
       rel="noopener noreferrer"
       className="blog-card group flex gap-3 sm:gap-4"
     >
-      {/* Image */}
-      <div className="w-24 h-24 relative flex-shrink-0 rounded-lg overflow-hidden bg-[#2a2a2a]">
+      {/* Image - landscape aspect ratio */}
+      <div className="w-36 sm:w-44 aspect-video relative flex-shrink-0 rounded-lg overflow-hidden bg-[#2a2a2a]">
         {post.imageUrl ? (
           <img
             src={post.imageUrl}
@@ -145,7 +163,7 @@ function BlogCard({ post }: { post: BlogPost }) {
 function BlogCardSkeleton() {
   return (
     <div className="blog-card flex gap-3 sm:gap-4">
-      <div className="w-24 h-24 flex-shrink-0 rounded-lg bg-[#2a2a2a] animate-pulse" />
+      <div className="w-36 sm:w-44 aspect-video flex-shrink-0 rounded-lg bg-[#2a2a2a] animate-pulse" />
       <div className="flex-1 flex flex-col justify-center gap-2">
         <div className="h-4 w-3/4 bg-[#2a2a2a] rounded animate-pulse" />
         <div className="h-3 w-24 bg-[#2a2a2a] rounded animate-pulse" />
@@ -164,8 +182,8 @@ export function RecentBlogs() {
     async function loadPosts() {
       try {
         // Use rss2json.com API for CORS-friendly RSS fetching
-        // Add cache-busting timestamp to get fresh data (updates hourly)
-        const cacheBuster = Math.floor(Date.now() / 3600000); // Changes every hour
+        // Per-request cache-busting for freshest data
+        const cacheBuster = Date.now();
         const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS_URL)}&_=${cacheBuster}`;
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("Failed to fetch");
@@ -175,17 +193,30 @@ export function RecentBlogs() {
           throw new Error("Invalid response");
         }
 
-        const parsedPosts: BlogPost[] = data.items.slice(0, 3).map((item, index) => ({
-          id: `blog-${index}-${new Date(item.pubDate).getTime()}`,
-          title: item.title,
-          description:
-            stripHtml(item.description).slice(0, 200) +
-            (item.description.length > 200 ? "..." : ""),
-          date: formatDate(item.pubDate),
-          author: item.author || "Open Session",
-          imageUrl: getImageUrl(item),
-          link: item.link,
-        }));
+        // Parse posts and fetch og:images for those without RSS images
+        const items = data.items.slice(0, 3);
+        const parsedPosts: BlogPost[] = await Promise.all(
+          items.map(async (item, index) => {
+            let imageUrl = getImageUrl(item);
+
+            // If no image from RSS, try fetching og:image from the post page
+            if (!imageUrl) {
+              imageUrl = await fetchOgImage(item.link);
+            }
+
+            return {
+              id: `blog-${index}-${new Date(item.pubDate).getTime()}`,
+              title: item.title,
+              description:
+                stripHtml(item.description).slice(0, 200) +
+                (item.description.length > 200 ? "..." : ""),
+              date: formatDate(item.pubDate),
+              author: item.author || "Open Session",
+              imageUrl,
+              link: item.link,
+            };
+          })
+        );
 
         setPosts(parsedPosts);
       } catch {
