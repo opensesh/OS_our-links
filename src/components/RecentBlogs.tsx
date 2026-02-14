@@ -119,15 +119,15 @@ function BlogCard({ post }: { post: BlogPost }) {
       href={post.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="blog-card group flex gap-3 sm:gap-4"
+      className="blog-card group flex flex-col sm:flex-row gap-3 sm:gap-4"
     >
-      {/* Image - landscape aspect ratio */}
-      <div className="w-36 sm:w-44 aspect-video relative flex-shrink-0 rounded-lg overflow-hidden bg-[#2a2a2a]">
+      {/* Image - full width on mobile, fixed on desktop, with padding to prevent cropping */}
+      <div className="w-full sm:w-48 aspect-video relative flex-shrink-0 rounded-lg overflow-hidden bg-[#2a2a2a] p-2 sm:p-3">
         {post.imageUrl ? (
           <img
             src={post.imageUrl}
             alt=""
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-contain rounded"
             loading="lazy"
           />
         ) : (
@@ -162,8 +162,8 @@ function BlogCard({ post }: { post: BlogPost }) {
 
 function BlogCardSkeleton() {
   return (
-    <div className="blog-card flex gap-3 sm:gap-4">
-      <div className="w-36 sm:w-44 aspect-video flex-shrink-0 rounded-lg bg-[#2a2a2a] animate-pulse" />
+    <div className="blog-card flex flex-col sm:flex-row gap-3 sm:gap-4">
+      <div className="w-full sm:w-48 aspect-video flex-shrink-0 rounded-lg bg-[#2a2a2a] animate-pulse" />
       <div className="flex-1 flex flex-col justify-center gap-2">
         <div className="h-4 w-3/4 bg-[#2a2a2a] rounded animate-pulse" />
         <div className="h-3 w-24 bg-[#2a2a2a] rounded animate-pulse" />
@@ -194,7 +194,7 @@ export function RecentBlogs() {
         }
 
         // Parse posts and fetch og:images for those without RSS images
-        const items = data.items.slice(0, 3);
+        const items = data.items; // Show all posts
         const parsedPosts: BlogPost[] = await Promise.all(
           items.map(async (item, index) => {
             let imageUrl = getImageUrl(item);
@@ -245,21 +245,8 @@ export function RecentBlogs() {
           Recent Blogs
         </h2>
 
-        {/* Blog cards - vertical stack */}
-        <div className="flex flex-col gap-3">
-          {isLoading ? (
-            <>
-              <BlogCardSkeleton />
-              <BlogCardSkeleton />
-              <BlogCardSkeleton />
-            </>
-          ) : (
-            posts.map((post) => <BlogCard key={post.id} post={post} />)
-          )}
-        </div>
-
-        {/* Subscribe form */}
-        <div className="mt-6">
+        {/* Subscribe form - right after heading */}
+        <div className="mb-4 sm:mb-6">
           <form
             action="https://opensession.substack.com/api/v1/free?nojs=true"
             method="post"
@@ -279,6 +266,19 @@ export function RecentBlogs() {
           <p className="subscribe-hint">
             Get our latest posts delivered to your inbox
           </p>
+        </div>
+
+        {/* Blog cards - vertical stack */}
+        <div className="flex flex-col gap-3">
+          {isLoading ? (
+            <>
+              <BlogCardSkeleton />
+              <BlogCardSkeleton />
+              <BlogCardSkeleton />
+            </>
+          ) : (
+            posts.map((post) => <BlogCard key={post.id} post={post} />)
+          )}
         </div>
       </div>
     </section>
