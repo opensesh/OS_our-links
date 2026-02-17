@@ -30,22 +30,29 @@ interface RssResponse {
   items: RssItem[];
 }
 
-// Fetch og:image from a post URL using CORS proxy
+// Fetch og:image from a post URL using CORS proxy with fallback chain
 async function fetchOgImage(postUrl: string): Promise<string | null> {
-  try {
-    // Use allorigins as a CORS proxy
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(postUrl)}&_=${Date.now()}`;
-    const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
-    if (!response.ok) return null;
+  const proxies = [
+    (url: string) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  ];
 
-    const html = await response.text();
-    // Match og:image meta tag (handles both quote styles and attribute order)
-    const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
-                    html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
-    return ogMatch?.[1] || null;
-  } catch {
-    return null;
+  for (const makeProxy of proxies) {
+    try {
+      const proxyUrl = makeProxy(postUrl);
+      const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
+      if (!response.ok) continue;
+
+      const html = await response.text();
+      // Match og:image meta tag (handles both quote styles and attribute order)
+      const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+                      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+      if (ogMatch?.[1]) return ogMatch[1];
+    } catch {
+      continue;
+    }
   }
+  return null;
 }
 
 function formatDate(dateStr: string): string {
