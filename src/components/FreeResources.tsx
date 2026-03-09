@@ -207,7 +207,7 @@ function ResourceCardComponent({
           <motion.img
             src={card.mediaDefault}
             alt={card.title}
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className={`absolute inset-0 w-full h-full object-cover ${isFullWidth ? "object-center" : "object-top"}`}
             animate={{
               scale: isHovered ? 1.02 : 1,
               opacity: isHovered ? 0 : 1,
@@ -220,7 +220,7 @@ function ResourceCardComponent({
         <motion.img
           src={card.imageHover}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover object-top"
+          className={`absolute inset-0 w-full h-full object-cover ${isFullWidth ? "object-center" : "object-top"}`}
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{
             opacity: isHovered ? 1 : 0,
