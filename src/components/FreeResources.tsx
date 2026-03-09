@@ -93,7 +93,7 @@ const resourceCards: ResourceCard[] = [
     imageHover: "/OS_our-links/images/design-directory-02.jpg",
     title: "Design Directory",
     description:
-      "All of our favorite tools in an interactive directory, open-source and ready to adapt",
+      "All of our favorite design tools in one interactive directory. Open-source and ready to adapt for your own creative workflow.",
     href: "https://design-directory-blue.vercel.app/",
     buttonLabel: "Website",
   },
@@ -106,7 +106,7 @@ const resourceCards: ResourceCard[] = [
     imageHover: "/OS_our-links/images/brand-design-system-02.jpg",
     title: "Brand Design System",
     description:
-      "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables. Ready for any agency or designer to get started. Preview ours as a view link for inspiration.",
+      "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables and ready to customize.",
     href: "#",
     buttonLabel: "Figma",
   },
@@ -131,7 +131,7 @@ const resourceCards: ResourceCard[] = [
     imageHover: "/OS_our-links/images/linktree-template-02.jpg",
     title: "Linktree Template",
     description:
-      "A beautiful, customizable link portal template ready to build and adapt.",
+      "A beautiful, customizable link portal template built with Next.js. Open-source and ready to adapt for your own brand.",
     href: "https://github.com/opensesh/linktree-alternative",
     buttonLabel: "GitHub",
   },
@@ -242,7 +242,7 @@ function ResourceCardComponent({
         <p className="resource-card-description text-[var(--color-vanilla)]/70 mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 flex-grow">
           {card.description}
         </p>
-        <span className="card-button inline-flex items-center gap-1.5 sm:gap-2 font-medium rounded-lg self-start">
+        <span className="card-button inline-flex items-center gap-1.5 sm:gap-2 font-medium rounded-lg self-end">
           {card.buttonLabel}
           <ExternalLinkIcon />
         </span>
