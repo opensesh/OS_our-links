@@ -72,7 +72,7 @@ interface ResourceCard {
 }
 
 const resourceCards: ResourceCard[] = [
-  // Row 1: Two columns
+  // Page 1: Portfolio + Design Directory
   {
     id: "portfolio",
     badge: { text: "Live", variant: "live" },
@@ -97,7 +97,7 @@ const resourceCards: ResourceCard[] = [
     href: "https://design-directory-blue.vercel.app/",
     buttonLabel: "Website",
   },
-  // Row 2: Full width (md:col-span-2)
+  // Page 2: Brand Design System + Linktree Template
   {
     id: "brand-design-system",
     badge: { text: "Coming Soon", variant: "coming-soon" },
@@ -109,19 +109,6 @@ const resourceCards: ResourceCard[] = [
       "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables and ready to customize.",
     href: "#",
     buttonLabel: "Figma",
-  },
-  // Row 3: Two columns
-  {
-    id: "karimo",
-    badge: { text: "Coming Soon", variant: "coming-soon" },
-    mediaDefault: "/OS_our-links/images/karimo-01.jpg",
-    mediaType: "image",
-    imageHover: "/OS_our-links/images/karimo-02.jpg",
-    title: "KARIMO",
-    description:
-      "A framework and Claude Code plug-in for PRD-driven autonomous development. Think of it as plan mode on steroids.",
-    href: "#",
-    buttonLabel: "GitHub",
   },
   {
     id: "linktree-template",
@@ -135,6 +122,29 @@ const resourceCards: ResourceCard[] = [
     href: "https://github.com/opensesh/linktree-alternative",
     buttonLabel: "GitHub",
   },
+  // Page 3: Karimo (last)
+  {
+    id: "karimo",
+    badge: { text: "Coming Soon", variant: "coming-soon" },
+    mediaDefault: "/OS_our-links/images/karimo-01.jpg",
+    mediaType: "image",
+    imageHover: "/OS_our-links/images/karimo-02.jpg",
+    title: "KARIMO",
+    description:
+      "A framework and Claude Code plug-in for PRD-driven autonomous development. Think of it as plan mode on steroids.",
+    href: "#",
+    buttonLabel: "GitHub",
+  },
+];
+
+// Desktop order: Portfolio, Design Directory, Brand Design System (full width), Linktree, Karimo
+// We need to reorder for desktop grid where Brand Design System spans full width in middle
+const desktopOrderedCards = [
+  resourceCards[0], // Portfolio
+  resourceCards[1], // Design Directory
+  resourceCards[2], // Brand Design System
+  resourceCards[4], // Karimo
+  resourceCards[3], // Linktree Template
 ];
 
 function Badge({ text, variant }: { text: string; variant: "coming-soon" | "live" }) {
@@ -150,10 +160,12 @@ function ResourceCardComponent({
   card,
   index,
   onCardClick,
+  isMobileView = false,
 }: {
   card: ResourceCard;
   index: number;
   onCardClick: (card: ResourceCard) => void;
+  isMobileView?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const isLive = card.badge.variant === "live";
@@ -173,7 +185,7 @@ function ResourceCardComponent({
   };
 
   // Brand Design System (index 2) spans full width on desktop
-  const isFullWidth = index === 2;
+  const isFullWidth = !isMobileView && index === 2;
 
   return (
     <motion.div
@@ -187,7 +199,10 @@ function ResourceCardComponent({
     >
       {/* Image/Video Area - rounded-t-[11px] to account for 1px border */}
       {/* Full-width card (Brand Design System) has shorter height on desktop to reduce empty space */}
-      <div className={`relative bg-[#191919] rounded-t-[11px] overflow-hidden ${isFullWidth ? "h-48 md:h-36" : "h-48"}`}>
+      {/* Mobile cards have taller images (h-40) to fill container better */}
+      <div className={`relative bg-[#191919] rounded-t-[11px] overflow-hidden ${
+        isMobileView ? "h-40" : (isFullWidth ? "h-48 md:h-36" : "h-48")
+      }`}>
         {/* O1 - Default media (image or video) */}
         {card.mediaType === "video" ? (
           <motion.video
@@ -283,7 +298,7 @@ function MobilePagination({
             key={index}
             className={`resource-pagination-dot ${currentPage === index ? "active" : ""}`}
             onClick={() => onDotClick(index)}
-            aria-label={`Go to resource ${index + 1}`}
+            aria-label={`Go to page ${index + 1}`}
           />
         ))}
       </div>
@@ -300,6 +315,15 @@ function MobilePagination({
   );
 }
 
+// Group cards into pages of 2 for mobile
+function getCardPages(cards: ResourceCard[]): ResourceCard[][] {
+  const pages: ResourceCard[][] = [];
+  for (let i = 0; i < cards.length; i += 2) {
+    pages.push(cards.slice(i, i + 2));
+  }
+  return pages;
+}
+
 export function FreeResources() {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
@@ -308,6 +332,10 @@ export function FreeResources() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const isMobile = useMediaQuery("(max-width: 767px)");
+
+  // Mobile: 2 cards per page, 3 pages total (2+2+1)
+  const mobilePages = getCardPages(resourceCards);
+  const totalPages = mobilePages.length;
 
   const handleCardClick = (card: ResourceCard) => {
     // If user has already subscribed or skipped, open resource directly
@@ -328,7 +356,7 @@ export function FreeResources() {
   };
 
   const handleNext = () => {
-    setCurrentPage((prev) => Math.min(resourceCards.length - 1, prev + 1));
+    setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1));
   };
 
   const handleDotClick = (index: number) => {
@@ -348,7 +376,7 @@ export function FreeResources() {
             Free Resources
           </h2>
 
-          {/* Mobile: Single card with pagination */}
+          {/* Mobile: 2 cards per page with pagination */}
           {isMobile ? (
             <div className="relative overflow-hidden">
               <AnimatePresence mode="wait">
@@ -358,18 +386,23 @@ export function FreeResources() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.2, ease: "easeInOut" }}
+                  className="grid grid-cols-2 gap-3"
                 >
-                  <ResourceCardComponent
-                    card={resourceCards[currentPage]}
-                    index={currentPage}
-                    onCardClick={handleCardClick}
-                  />
+                  {mobilePages[currentPage].map((card, idx) => (
+                    <ResourceCardComponent
+                      key={card.id}
+                      card={card}
+                      index={currentPage * 2 + idx}
+                      onCardClick={handleCardClick}
+                      isMobileView={true}
+                    />
+                  ))}
                 </motion.div>
               </AnimatePresence>
 
               <MobilePagination
                 currentPage={currentPage}
-                totalPages={resourceCards.length}
+                totalPages={totalPages}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
                 onDotClick={handleDotClick}
@@ -378,7 +411,7 @@ export function FreeResources() {
           ) : (
             /* Desktop: Responsive grid - 2 cols with Brand Design System spanning both */
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {resourceCards.map((card, index) => (
+              {desktopOrderedCards.map((card, index) => (
                 <ResourceCardComponent
                   key={card.id}
                   card={card}
