@@ -186,7 +186,8 @@ function ResourceCardComponent({
       tabIndex={isLive ? 0 : undefined}
     >
       {/* Image/Video Area - rounded-t-[11px] to account for 1px border */}
-      <div className="h-48 relative bg-[#191919] rounded-t-[11px] overflow-hidden">
+      {/* Full-width card (Brand Design System) has shorter height on desktop to reduce empty space */}
+      <div className={`relative bg-[#191919] rounded-t-[11px] overflow-hidden ${isFullWidth ? "h-48 md:h-36" : "h-48"}`}>
         {/* O1 - Default media (image or video) */}
         {card.mediaType === "video" ? (
           <motion.video
