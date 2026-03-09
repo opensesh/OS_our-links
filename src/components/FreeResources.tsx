@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { SubscribeModal, hasResourceAccess } from "./SubscribeModal";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 // Custom icon component - stroke-based for consistent outline style
 function ExternalLinkIcon() {
@@ -24,6 +25,40 @@ function ExternalLinkIcon() {
   );
 }
 
+function ChevronLeftIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+  );
+}
+
 interface ResourceCard {
   id: string;
   badge: { text: string; variant: "coming-soon" | "live" };
@@ -37,16 +72,17 @@ interface ResourceCard {
 }
 
 const resourceCards: ResourceCard[] = [
+  // Row 1: Two columns
   {
-    id: "brand-design-system",
-    badge: { text: "Coming Soon", variant: "coming-soon" },
-    mediaDefault: "/OS_our-links/images/brand-design-system-01.jpg",
+    id: "portfolio",
+    badge: { text: "Live", variant: "live" },
+    mediaDefault: "/OS_our-links/images/portfolio-01.jpg",
     mediaType: "image",
-    imageHover: "/OS_our-links/images/brand-design-system-02.jpg",
-    title: "Brand Design System",
+    imageHover: "/OS_our-links/images/portfolio-02.jpg",
+    title: "Portfolio Template",
     description:
-      "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables",
-    href: "#",
+      "Our co-founder's portfolio that helped him land jobs at Google, Salesforce, and other Fortune 500 companies. Open source and ready to customize",
+    href: "https://www.figma.com/community/file/1597821544420498783/portfolio-presentation-template-built-to-land-offers",
     buttonLabel: "Figma",
   },
   {
@@ -61,17 +97,43 @@ const resourceCards: ResourceCard[] = [
     href: "https://design-directory-blue.vercel.app/",
     buttonLabel: "Website",
   },
+  // Row 2: Full width (md:col-span-2)
   {
-    id: "portfolio",
-    badge: { text: "Live", variant: "live" },
-    mediaDefault: "/OS_our-links/images/portfolio-01.jpg",
+    id: "brand-design-system",
+    badge: { text: "Coming Soon", variant: "coming-soon" },
+    mediaDefault: "/OS_our-links/images/brand-design-system-01.jpg",
     mediaType: "image",
-    imageHover: "/OS_our-links/images/portfolio-02.jpg",
-    title: "Portfolio Presentation Template",
+    imageHover: "/OS_our-links/images/brand-design-system-02.jpg",
+    title: "Brand Design System",
     description:
-      "Our co-founder's portfolio that helped him land jobs at Google, Salesforce, and other Fortune 500 companies. Open source and ready to customize",
-    href: "https://www.figma.com/community/file/1597821544420498783/portfolio-presentation-template-built-to-land-offers",
+      "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables. Ready for any agency or designer to get started. Preview ours as a view link for inspiration.",
+    href: "#",
     buttonLabel: "Figma",
+  },
+  // Row 3: Two columns
+  {
+    id: "karimo",
+    badge: { text: "Coming Soon", variant: "coming-soon" },
+    mediaDefault: "/OS_our-links/images/karimo-01.jpg",
+    mediaType: "image",
+    imageHover: "/OS_our-links/images/karimo-02.jpg",
+    title: "KARIMO",
+    description:
+      "A framework and Claude Code plug-in for PRD-driven autonomous development. Think of it as plan mode on steroids.",
+    href: "#",
+    buttonLabel: "GitHub",
+  },
+  {
+    id: "linktree-template",
+    badge: { text: "Live", variant: "live" },
+    mediaDefault: "/OS_our-links/images/linktree-template-01.jpg",
+    mediaType: "image",
+    imageHover: "/OS_our-links/images/linktree-template-02.jpg",
+    title: "Linktree Template",
+    description:
+      "A beautiful, customizable link portal template ready to build and adapt.",
+    href: "https://github.com/opensesh/linktree-alternative",
+    buttonLabel: "GitHub",
   },
 ];
 
@@ -86,11 +148,11 @@ function Badge({ text, variant }: { text: string; variant: "coming-soon" | "live
 
 function ResourceCardComponent({
   card,
-  isLast,
+  index,
   onCardClick,
 }: {
   card: ResourceCard;
-  isLast: boolean;
+  index: number;
   onCardClick: (card: ResourceCard) => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -110,9 +172,12 @@ function ResourceCardComponent({
     }
   };
 
+  // Brand Design System (index 2) spans full width on desktop
+  const isFullWidth = index === 2;
+
   return (
     <motion.div
-      className={`resource-card w-full flex flex-col ${isLast ? "md:col-span-2" : ""} ${isLive ? "cursor-pointer" : ""}`}
+      className={`resource-card w-full flex flex-col ${isFullWidth ? "md:col-span-2" : ""} ${isLive ? "cursor-pointer" : ""}`}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={handleClick}
@@ -186,11 +251,62 @@ function ResourceCardComponent({
   );
 }
 
+// Mobile pagination component
+function MobilePagination({
+  currentPage,
+  totalPages,
+  onPrevious,
+  onNext,
+  onDotClick,
+}: {
+  currentPage: number;
+  totalPages: number;
+  onPrevious: () => void;
+  onNext: () => void;
+  onDotClick: (index: number) => void;
+}) {
+  return (
+    <div className="resource-pagination">
+      <button
+        className="resource-nav-arrow"
+        onClick={onPrevious}
+        disabled={currentPage === 0}
+        aria-label="Previous resource"
+      >
+        <ChevronLeftIcon />
+      </button>
+
+      <div className="resource-dots">
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            className={`resource-pagination-dot ${currentPage === index ? "active" : ""}`}
+            onClick={() => onDotClick(index)}
+            aria-label={`Go to resource ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      <button
+        className="resource-nav-arrow"
+        onClick={onNext}
+        disabled={currentPage === totalPages - 1}
+        aria-label="Next resource"
+      >
+        <ChevronRightIcon />
+      </button>
+    </div>
+  );
+}
+
 export function FreeResources() {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     card: ResourceCard | null;
   }>({ isOpen: false, card: null });
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   const handleCardClick = (card: ResourceCard) => {
     // If user has already subscribed or skipped, open resource directly
@@ -206,6 +322,18 @@ export function FreeResources() {
     setModalState({ isOpen: false, card: null });
   };
 
+  const handlePrevious = () => {
+    setCurrentPage((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentPage((prev) => Math.min(resourceCards.length - 1, prev + 1));
+  };
+
+  const handleDotClick = (index: number) => {
+    setCurrentPage(index);
+  };
+
   return (
     <>
       <section className="w-full mt-6 sm:mt-8">
@@ -219,17 +347,46 @@ export function FreeResources() {
             Free Resources
           </h2>
 
-          {/* Responsive grid - 1 col mobile, 2 cols on md+ with 3rd card spanning both */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {resourceCards.map((card, index) => (
-              <ResourceCardComponent
-                key={card.id}
-                card={card}
-                isLast={index === resourceCards.length - 1}
-                onCardClick={handleCardClick}
+          {/* Mobile: Single card with pagination */}
+          {isMobile ? (
+            <div className="relative overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentPage}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <ResourceCardComponent
+                    card={resourceCards[currentPage]}
+                    index={currentPage}
+                    onCardClick={handleCardClick}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              <MobilePagination
+                currentPage={currentPage}
+                totalPages={resourceCards.length}
+                onPrevious={handlePrevious}
+                onNext={handleNext}
+                onDotClick={handleDotClick}
               />
-            ))}
-          </div>
+            </div>
+          ) : (
+            /* Desktop: Responsive grid - 2 cols with Brand Design System spanning both */
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {resourceCards.map((card, index) => (
+                <ResourceCardComponent
+                  key={card.id}
+                  card={card}
+                  index={index}
+                  onCardClick={handleCardClick}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
