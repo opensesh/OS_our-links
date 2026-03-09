@@ -199,9 +199,8 @@ function ResourceCardComponent({
     >
       {/* Image/Video Area - rounded-t-[11px] to account for 1px border */}
       {/* Full-width card (Brand Design System) has shorter height on desktop to reduce empty space */}
-      {/* Mobile cards have taller images (h-40) to fill container better */}
       <div className={`relative bg-[#191919] rounded-t-[11px] overflow-hidden ${
-        isMobileView ? "h-40" : (isFullWidth ? "h-48 md:h-36" : "h-48")
+        isFullWidth ? "h-48 md:h-36" : "h-48"
       }`}>
         {/* O1 - Default media (image or video) */}
         {card.mediaType === "video" ? (
@@ -376,17 +375,28 @@ export function FreeResources() {
             Free Resources
           </h2>
 
-          {/* Mobile: 2 cards per page with pagination */}
+          {/* Mobile: 2 cards per page stacked vertically with swipe + pagination */}
           {isMobile ? (
             <div className="relative overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentPage}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
-                  className="grid grid-cols-2 gap-3"
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(_, info) => {
+                    const swipeThreshold = 50;
+                    if (info.offset.x < -swipeThreshold && currentPage < totalPages - 1) {
+                      setCurrentPage(currentPage + 1);
+                    } else if (info.offset.x > swipeThreshold && currentPage > 0) {
+                      setCurrentPage(currentPage - 1);
+                    }
+                  }}
+                  className="flex flex-col gap-4"
                 >
                   {mobilePages[currentPage].map((card, idx) => (
                     <ResourceCardComponent
