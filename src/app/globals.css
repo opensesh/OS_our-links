@@ -932,3 +932,79 @@ button,
   border-radius: 9999px;
   transition: width 0.15s ease-out;
 }
+
+/* ============================================
+   MOBILE PAGINATION - Free Resources
+   ============================================ */
+
+/* Mobile pagination container */
+.resource-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Arrow buttons */
+.resource-nav-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border-secondary);
+  color: var(--color-vanilla);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.resource-nav-arrow:hover {
+  border-color: var(--border-brand);
+  color: var(--border-brand);
+}
+
+.resource-nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.resource-nav-arrow:disabled:hover {
+  border-color: var(--border-secondary);
+  color: var(--color-vanilla);
+}
+
+/* Dot indicators */
+.resource-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.resource-pagination-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-secondary);
+  border: none;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.resource-pagination-dot:hover {
+  background: var(--fg-tertiary);
+}
+
+.resource-pagination-dot.active {
+  background: var(--color-vanilla);
+  transform: scale(1.2);
+}
+
+/* Hide pagination on desktop */
+@media (min-width: 768px) {
+  .resource-pagination {
+    display: none;
+  }
+}
