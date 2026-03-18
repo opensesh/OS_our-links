@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
-import { FaultyTerminal } from "@/components/FaultyTerminal";
+import { FaultyTerminalWrapper } from "@/components/FaultyTerminalWrapper";
 
 const GA_MEASUREMENT_ID = "G-VCQFSDNWJN";
 
@@ -67,7 +67,7 @@ export default function RootLayout({
       <body className="antialiased">
         {/* Background layer - fixed, behind all content */}
         <div className="fixed inset-0 z-0" aria-hidden="true">
-          <FaultyTerminal
+          <FaultyTerminalWrapper
             tint="#FFFAEE"
             brightness={0.08}
             curvature={0.4}

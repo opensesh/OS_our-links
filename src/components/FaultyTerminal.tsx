@@ -1,8 +1,24 @@
 "use client";
 
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
-import { useEffect, useRef, useMemo, useCallback } from "react";
+import { useEffect, useRef, useMemo, useCallback, useState } from "react";
 import "./FaultyTerminal.css";
+
+/**
+ * Check if WebGL is supported in the current browser.
+ * Returns false for browsers that don't support WebGL (e.g., Instagram WebView on iOS)
+ */
+function isWebGLSupported(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const canvas = document.createElement("canvas");
+    const gl =
+      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    return gl !== null;
+  } catch {
+    return false;
+  }
+}
 
 const vertexShader = `
 attribute vec2 position;
@@ -282,6 +298,9 @@ export function FaultyTerminal({
   const loadAnimationStartRef = useRef(0);
   const timeOffsetRef = useRef(Math.random() * 100);
 
+  // Track whether WebGL initialization succeeded
+  const [webglFailed, setWebglFailed] = useState(false);
+
   const tintVec = useMemo(() => hexToRgb(tint), [tint]);
 
   const ditherValue = useMemo(
@@ -300,116 +319,142 @@ export function FaultyTerminal({
     const ctn = containerRef.current;
     if (!ctn) return;
 
-    const renderer = new Renderer({ dpr });
-    rendererRef.current = renderer;
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 1);
-
-    const geometry = new Triangle(gl);
-
-    const program = new Program(gl, {
-      vertex: vertexShader,
-      fragment: fragmentShader,
-      uniforms: {
-        iTime: { value: 0 },
-        iResolution: {
-          value: new Color(
-            gl.canvas.width,
-            gl.canvas.height,
-            gl.canvas.width / gl.canvas.height
-          ),
-        },
-        uScale: { value: scale },
-
-        uGridMul: { value: new Float32Array(gridMul) },
-        uDigitSize: { value: digitSize },
-        uScanlineIntensity: { value: scanlineIntensity },
-        uGlitchAmount: { value: glitchAmount },
-        uFlickerAmount: { value: flickerAmount },
-        uNoiseAmp: { value: noiseAmp },
-        uChromaticAberration: { value: chromaticAberration },
-        uDither: { value: ditherValue },
-        uCurvature: { value: curvature },
-        uTint: { value: new Color(tintVec[0], tintVec[1], tintVec[2]) },
-        uMouse: {
-          value: new Float32Array([
-            smoothMouseRef.current.x,
-            smoothMouseRef.current.y,
-          ]),
-        },
-        uMouseStrength: { value: mouseStrength },
-        uUseMouse: { value: mouseReact ? 1 : 0 },
-        uPageLoadProgress: { value: pageLoadAnimation ? 0 : 1 },
-        uUsePageLoadAnimation: { value: pageLoadAnimation ? 1 : 0 },
-        uBrightness: { value: brightness },
-      },
-    });
-    programRef.current = program;
-
-    const mesh = new Mesh(gl, { geometry, program });
-
-    function resize() {
-      if (!ctn || !renderer) return;
-      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
-      program.uniforms.iResolution.value = new Color(
-        gl.canvas.width,
-        gl.canvas.height,
-        gl.canvas.width / gl.canvas.height
-      );
+    // Check WebGL support before attempting to initialize
+    if (!isWebGLSupported()) {
+      console.warn("FaultyTerminal: WebGL not supported, skipping render");
+      setWebglFailed(true);
+      return;
     }
 
-    const resizeObserver = new ResizeObserver(() => resize());
-    resizeObserver.observe(ctn);
-    resize();
+    // Check ResizeObserver support (needed for responsive canvas)
+    if (typeof ResizeObserver === "undefined") {
+      console.warn(
+        "FaultyTerminal: ResizeObserver not supported, skipping render"
+      );
+      setWebglFailed(true);
+      return;
+    }
 
-    const update = (t: number) => {
+    let resizeObserver: ResizeObserver | null = null;
+
+    try {
+      const renderer = new Renderer({ dpr });
+      rendererRef.current = renderer;
+      const gl = renderer.gl;
+      gl.clearColor(0, 0, 0, 1);
+
+      const geometry = new Triangle(gl);
+
+      const program = new Program(gl, {
+        vertex: vertexShader,
+        fragment: fragmentShader,
+        uniforms: {
+          iTime: { value: 0 },
+          iResolution: {
+            value: new Color(
+              gl.canvas.width,
+              gl.canvas.height,
+              gl.canvas.width / gl.canvas.height
+            ),
+          },
+          uScale: { value: scale },
+
+          uGridMul: { value: new Float32Array(gridMul) },
+          uDigitSize: { value: digitSize },
+          uScanlineIntensity: { value: scanlineIntensity },
+          uGlitchAmount: { value: glitchAmount },
+          uFlickerAmount: { value: flickerAmount },
+          uNoiseAmp: { value: noiseAmp },
+          uChromaticAberration: { value: chromaticAberration },
+          uDither: { value: ditherValue },
+          uCurvature: { value: curvature },
+          uTint: { value: new Color(tintVec[0], tintVec[1], tintVec[2]) },
+          uMouse: {
+            value: new Float32Array([
+              smoothMouseRef.current.x,
+              smoothMouseRef.current.y,
+            ]),
+          },
+          uMouseStrength: { value: mouseStrength },
+          uUseMouse: { value: mouseReact ? 1 : 0 },
+          uPageLoadProgress: { value: pageLoadAnimation ? 0 : 1 },
+          uUsePageLoadAnimation: { value: pageLoadAnimation ? 1 : 0 },
+          uBrightness: { value: brightness },
+        },
+      });
+      programRef.current = program;
+
+      const mesh = new Mesh(gl, { geometry, program });
+
+      function resize() {
+        if (!ctn) return;
+        renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+        program.uniforms.iResolution.value = new Color(
+          gl.canvas.width,
+          gl.canvas.height,
+          gl.canvas.width / gl.canvas.height
+        );
+      }
+
+      resizeObserver = new ResizeObserver(() => resize());
+      resizeObserver.observe(ctn);
+      resize();
+
+      const update = (t: number) => {
+        rafRef.current = requestAnimationFrame(update);
+
+        if (pageLoadAnimation && loadAnimationStartRef.current === 0) {
+          loadAnimationStartRef.current = t;
+        }
+
+        if (!pause) {
+          const elapsed = (t * 0.001 + timeOffsetRef.current) * timeScale;
+          program.uniforms.iTime.value = elapsed;
+          frozenTimeRef.current = elapsed;
+        } else {
+          program.uniforms.iTime.value = frozenTimeRef.current;
+        }
+
+        if (pageLoadAnimation && loadAnimationStartRef.current > 0) {
+          const animationDuration = 2000;
+          const animationElapsed = t - loadAnimationStartRef.current;
+          const progress = Math.min(animationElapsed / animationDuration, 1);
+          program.uniforms.uPageLoadProgress.value = progress;
+        }
+
+        if (mouseReact) {
+          const dampingFactor = 0.08;
+          const smoothMouse = smoothMouseRef.current;
+          const mouse = mouseRef.current;
+          smoothMouse.x += (mouse.x - smoothMouse.x) * dampingFactor;
+          smoothMouse.y += (mouse.y - smoothMouse.y) * dampingFactor;
+
+          const mouseUniform = program.uniforms.uMouse.value as Float32Array;
+          mouseUniform[0] = smoothMouse.x;
+          mouseUniform[1] = smoothMouse.y;
+        }
+
+        renderer.render({ scene: mesh });
+      };
       rafRef.current = requestAnimationFrame(update);
+      ctn.appendChild(gl.canvas);
 
-      if (pageLoadAnimation && loadAnimationStartRef.current === 0) {
-        loadAnimationStartRef.current = t;
-      }
-
-      if (!pause) {
-        const elapsed = (t * 0.001 + timeOffsetRef.current) * timeScale;
-        program.uniforms.iTime.value = elapsed;
-        frozenTimeRef.current = elapsed;
-      } else {
-        program.uniforms.iTime.value = frozenTimeRef.current;
-      }
-
-      if (pageLoadAnimation && loadAnimationStartRef.current > 0) {
-        const animationDuration = 2000;
-        const animationElapsed = t - loadAnimationStartRef.current;
-        const progress = Math.min(animationElapsed / animationDuration, 1);
-        program.uniforms.uPageLoadProgress.value = progress;
-      }
-
-      if (mouseReact) {
-        const dampingFactor = 0.08;
-        const smoothMouse = smoothMouseRef.current;
-        const mouse = mouseRef.current;
-        smoothMouse.x += (mouse.x - smoothMouse.x) * dampingFactor;
-        smoothMouse.y += (mouse.y - smoothMouse.y) * dampingFactor;
-
-        const mouseUniform = program.uniforms.uMouse.value as Float32Array;
-        mouseUniform[0] = smoothMouse.x;
-        mouseUniform[1] = smoothMouse.y;
-      }
-
-      renderer.render({ scene: mesh });
-    };
-    rafRef.current = requestAnimationFrame(update);
-    ctn.appendChild(gl.canvas);
-
-    // Listen on window to capture mouse events even when content is on top
-    if (mouseReact) window.addEventListener("mousemove", handleMouseMove);
+      // Listen on window to capture mouse events even when content is on top
+      if (mouseReact) window.addEventListener("mousemove", handleMouseMove);
+    } catch (error) {
+      // WebGL or shader compilation failed - gracefully degrade
+      console.warn("FaultyTerminal: WebGL initialization failed", error);
+      setWebglFailed(true);
+      return;
+    }
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      resizeObserver.disconnect();
+      resizeObserver?.disconnect();
       if (mouseReact) window.removeEventListener("mousemove", handleMouseMove);
-      if (gl.canvas.parentElement === ctn) ctn.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      const gl = rendererRef.current?.gl;
+      if (gl?.canvas?.parentElement === ctn) ctn.removeChild(gl.canvas);
+      gl?.getExtension("WEBGL_lose_context")?.loseContext();
       loadAnimationStartRef.current = 0;
       timeOffsetRef.current = Math.random() * 100;
     };
@@ -434,6 +479,11 @@ export function FaultyTerminal({
     brightness,
     handleMouseMove,
   ]);
+
+  // If WebGL failed, render nothing - the page will still work without the background
+  if (webglFailed) {
+    return null;
+  }
 
   return (
     <div
