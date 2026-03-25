@@ -100,14 +100,14 @@ const resourceCards: ResourceCard[] = [
   // Page 2: Brand Design System + Linktree Template
   {
     id: "brand-design-system",
-    badge: { text: "Coming Soon", variant: "coming-soon" },
+    badge: { text: "Live", variant: "live" },
     mediaDefault: "/OS_our-links/images/brand-design-system-01.jpg",
     mediaType: "image",
     imageHover: "/OS_our-links/images/brand-design-system-02.jpg",
     title: "Brand Design System",
     description:
       "Comprehensive design system optimized for brand identity in the AI era. Fully configurable with connected variables and ready to customize.",
-    href: "#",
+    href: "https://www.figma.com/community/file/1618448560463755361",
     buttonLabel: "Figma",
   },
   {
