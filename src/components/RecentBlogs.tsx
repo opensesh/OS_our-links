@@ -83,8 +83,13 @@ export function RecentBlogs() {
   useEffect(() => {
     async function loadPosts() {
       try {
+        // Derive basePath from current URL for GitHub Pages compatibility
+        // e.g., https://opensesh.github.io/OS_our-links/ -> /OS_our-links
+        const basePath = window.location.pathname.replace(/\/$/, "") || "";
+        const blogsUrl = `${basePath}/data/blogs.json`;
+
         // Fetch pre-built static JSON (generated at build time)
-        const response = await fetch("/data/blogs.json");
+        const response = await fetch(blogsUrl);
         if (!response.ok) {
           throw new Error(`Failed to fetch blogs: ${response.status}`);
         }
