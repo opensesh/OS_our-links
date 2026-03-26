@@ -8,7 +8,7 @@
  * fetching directly from Substack in a Node.js environment.
  */
 
-import { writeFileSync, mkdirSync, existsSync } from "fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { join } from "path";
 
 const RSS_URL = "https://opensession.substack.com/feed";
@@ -206,16 +206,67 @@ async function fetchOgImage(postUrl: string): Promise<string | null> {
   }
 }
 
-async function main() {
-  console.log("Fetching RSS from Substack...");
-
-  const response = await fetch(RSS_URL, { headers: FETCH_HEADERS });
-  if (!response.ok) {
-    throw new Error(`Failed to fetch RSS: ${response.status} ${response.statusText}`);
+async function fetchRss(): Promise<string | null> {
+  // Try direct fetch first
+  try {
+    console.log("Attempting direct fetch from Substack...");
+    const response = await fetch(RSS_URL, { headers: FETCH_HEADERS });
+    if (response.ok) {
+      return await response.text();
+    }
+    console.log(`Direct fetch failed: ${response.status} ${response.statusText}`);
+  } catch (err) {
+    console.log(`Direct fetch error: ${err}`);
   }
 
-  const xmlText = await response.text();
-  console.log(`Received ${xmlText.length} bytes of XML`);
+  // Try with a CORS proxy (works in Node.js too)
+  const proxies = [
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(RSS_URL)}`,
+    `https://corsproxy.io/?${encodeURIComponent(RSS_URL)}`,
+  ];
+
+  for (const proxyUrl of proxies) {
+    try {
+      console.log(`Trying proxy: ${proxyUrl.split("?")[0]}...`);
+      const response = await fetch(proxyUrl, {
+        headers: FETCH_HEADERS,
+        signal: AbortSignal.timeout(10000),
+      });
+      if (response.ok) {
+        const text = await response.text();
+        if (text.includes("<rss") || text.includes("<?xml")) {
+          return text;
+        }
+      }
+    } catch (err) {
+      console.log(`Proxy failed: ${err}`);
+    }
+  }
+
+  return null;
+}
+
+async function main() {
+  console.log("Fetching RSS from Substack...\n");
+
+  const xmlText = await fetchRss();
+
+  if (!xmlText) {
+    // Check if we have existing data to fall back to
+    if (existsSync(OUTPUT_FILE)) {
+      console.log("\nFailed to fetch fresh RSS data.");
+      console.log("Using existing blogs.json (build will continue with cached data)");
+      const existing = JSON.parse(readFileSync(OUTPUT_FILE, "utf-8"));
+      console.log(`\nExisting data has ${existing.length} posts:`);
+      existing.forEach((post: BlogPost, i: number) => {
+        console.log(`  ${i + 1}. ${post.title}`);
+      });
+      return; // Exit successfully with existing data
+    }
+    throw new Error("Failed to fetch RSS and no existing data available");
+  }
+
+  console.log(`\nReceived ${xmlText.length} bytes of XML`);
 
   const posts = parseRssXml(xmlText);
   console.log(`Parsed ${posts.length} blog posts`);
