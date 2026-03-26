@@ -241,38 +241,59 @@ export function RecentBlogs() {
   useEffect(() => {
     async function loadPosts() {
       try {
-        // Fetch RSS directly via CORS proxy with fallback chain (avoids rss2json caching issues)
+        // Try multiple approaches to fetch RSS with fallbacks
         const cacheBuster = Date.now();
+        let items: RssItem[] = [];
+
+        // Approach 1: Try CORS proxies for direct XML parsing (freshest data)
         const proxies = [
           (url: string) => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}&_=${cacheBuster}`,
           (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}&_=${cacheBuster}`,
         ];
 
-        let xmlText = "";
         for (const makeProxy of proxies) {
           try {
             const proxyUrl = makeProxy(SUBSTACK_RSS_URL);
-            const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
+            const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(6000) });
             if (!response.ok) continue;
-            xmlText = await response.text();
+            const xmlText = await response.text();
             // Verify it's valid XML (starts with <?xml or <rss)
             if (xmlText.includes("<rss") || xmlText.includes("<?xml")) {
-              break;
+              items = parseRssXml(xmlText);
+              if (items.length > 0) break;
             }
-            xmlText = "";
           } catch {
             continue;
           }
         }
 
-        if (!xmlText) {
-          throw new Error("Failed to fetch RSS from all proxies");
+        // Approach 2: Fallback to rss2json if proxies fail (may have cached data)
+        if (items.length === 0) {
+          try {
+            const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS_URL)}&_=${cacheBuster}`;
+            const response = await fetch(rss2jsonUrl, { signal: AbortSignal.timeout(8000) });
+            if (response.ok) {
+              const data = await response.json();
+              if (data.status === "ok" && data.items) {
+                items = data.items.map((item: RssItem) => ({
+                  title: item.title,
+                  link: item.link,
+                  description: item.description,
+                  content: item.content || item.description,
+                  pubDate: item.pubDate,
+                  author: item.author || "Open Session",
+                  thumbnail: item.thumbnail || "",
+                  enclosure: item.enclosure,
+                }));
+              }
+            }
+          } catch {
+            // Silently fail, will show nothing if all approaches fail
+          }
         }
 
-        const items = parseRssXml(xmlText);
-
         if (!items.length) {
-          throw new Error("No items found in RSS feed");
+          throw new Error("Failed to fetch RSS from all sources");
         }
 
         // Parse posts and fetch og:images for those without RSS images
