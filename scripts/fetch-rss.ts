@@ -195,12 +195,19 @@ async function fetchOgImage(postUrl: string): Promise<string | null> {
 
     const html = await response.text();
 
-    // Match og:image meta tag
+    // Try og:image first (standard social preview)
     const ogMatch =
       html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
       html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
 
-    return ogMatch?.[1] || null;
+    if (ogMatch?.[1]) return ogMatch[1];
+
+    // Fallback to twitter:image (sometimes more up-to-date)
+    const twitterMatch =
+      html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
+
+    return twitterMatch?.[1] || null;
   } catch {
     return null;
   }
@@ -271,12 +278,16 @@ async function main() {
   const posts = parseRssXml(xmlText);
   console.log(`Parsed ${posts.length} blog posts`);
 
-  // Fetch og:image for posts missing images
+  // Fetch og:image for ALL posts (social preview is preferred over content images)
+  // The og:image is the curated thumbnail the author sets, which is better than
+  // extracting random images from article content
   for (const post of posts) {
-    if (!post.imageUrl) {
-      console.log(`Fetching og:image for: ${post.title.slice(0, 40)}...`);
-      post.imageUrl = await fetchOgImage(post.link);
+    console.log(`Fetching og:image for: ${post.title.slice(0, 40)}...`);
+    const ogImage = await fetchOgImage(post.link);
+    if (ogImage) {
+      post.imageUrl = ogImage;
     }
+    // If og:image not found, keep the content-extracted image as fallback
   }
 
   // Ensure output directory exists

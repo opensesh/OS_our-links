@@ -41,8 +41,8 @@ function BlogCard({ post }: { post: BlogPost }) {
 
       {/* Content */}
       <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
-        {/* Title - full width */}
-        <h4 className="blog-card-title font-accent font-bold text-[var(--color-vanilla)] line-clamp-2 leading-tight">
+        {/* Title - truncate to 1 line on desktop, allow 2 lines on mobile */}
+        <h4 className="blog-card-title font-accent font-bold text-[var(--color-vanilla)] line-clamp-2 sm:line-clamp-1 leading-tight">
           {post.title}
         </h4>
 
