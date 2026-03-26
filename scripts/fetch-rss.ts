@@ -1,0 +1,242 @@
+/**
+ * RSS Pre-fetch Script
+ *
+ * Fetches RSS at build time and saves as JSON for static consumption.
+ * Run with: bun run scripts/fetch-rss.ts
+ *
+ * This eliminates CORS issues and third-party proxy dependencies by
+ * fetching directly from Substack in a Node.js environment.
+ */
+
+import { writeFileSync, mkdirSync, existsSync } from "fs";
+import { join } from "path";
+
+const RSS_URL = "https://opensession.substack.com/feed";
+const OUTPUT_DIR = join(process.cwd(), "public", "data");
+const OUTPUT_FILE = join(OUTPUT_DIR, "blogs.json");
+
+interface BlogPost {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  imageUrl: string | null;
+  link: string;
+}
+
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+}
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function extractImageFromHtml(html: string): string | null {
+  if (!html) return null;
+
+  // Look for img tags with src attribute
+  const imgMatch = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (imgMatch?.[1]) {
+    let url = imgMatch[1];
+    // Normalize Substack CDN URLs to a reasonable size
+    if (url.includes("substackcdn.com")) {
+      url = url.replace(/\/w_\d+,c_limit\//, "/w_400,c_limit/");
+    }
+    return url;
+  }
+
+  return null;
+}
+
+function getTagContent(item: string, tagName: string): string {
+  // Handle CDATA sections
+  const cdataPattern = new RegExp(
+    `<${tagName}[^>]*>\\s*<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>\\s*</${tagName}>`,
+    "i"
+  );
+  const cdataMatch = item.match(cdataPattern);
+  if (cdataMatch) return cdataMatch[1].trim();
+
+  // Handle regular tags
+  const pattern = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)</${tagName}>`, "i");
+  const match = item.match(pattern);
+  return match ? match[1].trim() : "";
+}
+
+function getNamespacedTagContent(item: string, ns: string, tagName: string): string {
+  // Try namespace:tag format
+  const nsPattern = new RegExp(
+    `<${ns}:${tagName}[^>]*>\\s*<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>\\s*</${ns}:${tagName}>`,
+    "i"
+  );
+  const nsMatch = item.match(nsPattern);
+  if (nsMatch) return nsMatch[1].trim();
+
+  const nsPattern2 = new RegExp(`<${ns}:${tagName}[^>]*>([\\s\\S]*?)</${ns}:${tagName}>`, "i");
+  const nsMatch2 = item.match(nsPattern2);
+  return nsMatch2 ? nsMatch2[1].trim() : "";
+}
+
+function getAttributeValue(tag: string, attrName: string): string {
+  const pattern = new RegExp(`${attrName}=["']([^"']+)["']`, "i");
+  const match = tag.match(pattern);
+  return match ? match[1] : "";
+}
+
+function parseRssXml(xmlText: string): BlogPost[] {
+  const items: BlogPost[] = [];
+
+  // Extract all <item> elements
+  const itemPattern = /<item>([\s\S]*?)<\/item>/gi;
+  let itemMatch;
+
+  while ((itemMatch = itemPattern.exec(xmlText)) !== null) {
+    const itemContent = itemMatch[1];
+
+    const title = getTagContent(itemContent, "title");
+    const link = getTagContent(itemContent, "link");
+    const description = getTagContent(itemContent, "description");
+    const pubDate = getTagContent(itemContent, "pubDate");
+
+    // Get author from dc:creator or author tag
+    let author = getNamespacedTagContent(itemContent, "dc", "creator");
+    if (!author) author = getTagContent(itemContent, "author");
+    if (!author) author = "Open Session";
+
+    // Get content from content:encoded
+    const content = getNamespacedTagContent(itemContent, "content", "encoded") || description;
+
+    // Get image URL - try multiple sources
+    let imageUrl: string | null = null;
+
+    // 1. Try media:thumbnail
+    const mediaThumbnailMatch = itemContent.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i);
+    if (mediaThumbnailMatch) {
+      imageUrl = mediaThumbnailMatch[1];
+    }
+
+    // 2. Try media:content
+    if (!imageUrl) {
+      const mediaContentMatch = itemContent.match(/<media:content[^>]+url=["']([^"']+)["']/i);
+      if (mediaContentMatch) {
+        imageUrl = mediaContentMatch[1];
+      }
+    }
+
+    // 3. Try enclosure if it's an image
+    if (!imageUrl) {
+      const enclosureMatch = itemContent.match(/<enclosure[^>]+>/i);
+      if (enclosureMatch) {
+        const enclosureType = getAttributeValue(enclosureMatch[0], "type");
+        if (enclosureType?.startsWith("image/")) {
+          imageUrl = getAttributeValue(enclosureMatch[0], "url");
+        }
+      }
+    }
+
+    // 4. Extract from content HTML
+    if (!imageUrl) {
+      imageUrl = extractImageFromHtml(content);
+    }
+
+    // 5. Extract from description HTML
+    if (!imageUrl) {
+      imageUrl = extractImageFromHtml(description);
+    }
+
+    // Create unique ID
+    const id = `blog-${items.length}-${new Date(pubDate).getTime()}`;
+
+    // Clean and truncate description
+    const cleanDescription = stripHtml(description).slice(0, 200) + (description.length > 200 ? "..." : "");
+
+    items.push({
+      id,
+      title,
+      description: cleanDescription,
+      date: formatDate(pubDate),
+      author,
+      imageUrl,
+      link,
+    });
+  }
+
+  return items;
+}
+
+async function fetchOgImage(postUrl: string): Promise<string | null> {
+  try {
+    const response = await fetch(postUrl, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) return null;
+
+    const html = await response.text();
+
+    // Match og:image meta tag
+    const ogMatch =
+      html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+
+    return ogMatch?.[1] || null;
+  } catch {
+    return null;
+  }
+}
+
+async function main() {
+  console.log("Fetching RSS from Substack...");
+
+  const response = await fetch(RSS_URL);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch RSS: ${response.status} ${response.statusText}`);
+  }
+
+  const xmlText = await response.text();
+  console.log(`Received ${xmlText.length} bytes of XML`);
+
+  const posts = parseRssXml(xmlText);
+  console.log(`Parsed ${posts.length} blog posts`);
+
+  // Fetch og:image for posts missing images
+  for (const post of posts) {
+    if (!post.imageUrl) {
+      console.log(`Fetching og:image for: ${post.title.slice(0, 40)}...`);
+      post.imageUrl = await fetchOgImage(post.link);
+    }
+  }
+
+  // Ensure output directory exists
+  if (!existsSync(OUTPUT_DIR)) {
+    mkdirSync(OUTPUT_DIR, { recursive: true });
+    console.log(`Created directory: ${OUTPUT_DIR}`);
+  }
+
+  // Write JSON file
+  writeFileSync(OUTPUT_FILE, JSON.stringify(posts, null, 2));
+  console.log(`\nSaved ${posts.length} blog posts to ${OUTPUT_FILE}`);
+
+  // Log post titles for verification
+  console.log("\nBlog posts:");
+  posts.forEach((post, i) => {
+    console.log(`  ${i + 1}. ${post.title}`);
+  });
+}
+
+main().catch((err) => {
+  console.error("Error:", err);
+  process.exit(1);
+});
