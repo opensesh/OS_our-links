@@ -25,9 +25,59 @@ interface RssItem {
   enclosure?: { link: string; type?: string };
 }
 
-interface RssResponse {
-  status: string;
-  items: RssItem[];
+// Parse RSS XML directly using DOMParser (no third-party JSON conversion)
+function parseRssXml(xmlText: string): RssItem[] {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xmlText, "text/xml");
+
+  const items = doc.querySelectorAll("item");
+  const parsedItems: RssItem[] = [];
+
+  items.forEach((item) => {
+    // Helper to get text content safely
+    const getText = (selector: string): string => {
+      const el = item.querySelector(selector);
+      return el?.textContent?.trim() || "";
+    };
+
+    // Get content from content:encoded or fallback to description
+    const contentEncoded = item.getElementsByTagName("content:encoded")[0];
+    const content = contentEncoded?.textContent?.trim() || getText("description");
+
+    // Get author from dc:creator or author
+    const dcCreator = item.getElementsByTagName("dc:creator")[0];
+    const author = dcCreator?.textContent?.trim() || getText("author") || "Open Session";
+
+    // Get enclosure if present
+    const enclosureEl = item.querySelector("enclosure");
+    const enclosure = enclosureEl
+      ? {
+          link: enclosureEl.getAttribute("url") || "",
+          type: enclosureEl.getAttribute("type") || undefined,
+        }
+      : undefined;
+
+    // Get media:thumbnail or media:content for image
+    const mediaThumbnail = item.getElementsByTagName("media:thumbnail")[0];
+    const mediaContent = item.getElementsByTagName("media:content")[0];
+    const thumbnail =
+      mediaThumbnail?.getAttribute("url") ||
+      mediaContent?.getAttribute("url") ||
+      "";
+
+    parsedItems.push({
+      title: getText("title"),
+      link: getText("link"),
+      description: getText("description"),
+      content,
+      pubDate: getText("pubDate"),
+      author,
+      thumbnail,
+      enclosure,
+    });
+  });
+
+  return parsedItems;
 }
 
 // Fetch og:image from a post URL using CORS proxy with fallback chain
@@ -191,20 +241,41 @@ export function RecentBlogs() {
   useEffect(() => {
     async function loadPosts() {
       try {
-        // Use rss2json.com API for CORS-friendly RSS fetching
-        // Per-request cache-busting for freshest data
+        // Fetch RSS directly via CORS proxy with fallback chain (avoids rss2json caching issues)
         const cacheBuster = Date.now();
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS_URL)}&_=${cacheBuster}`;
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error("Failed to fetch");
-        const data: RssResponse = await response.json();
+        const proxies = [
+          (url: string) => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}&_=${cacheBuster}`,
+          (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}&_=${cacheBuster}`,
+        ];
 
-        if (data.status !== "ok" || !data.items) {
-          throw new Error("Invalid response");
+        let xmlText = "";
+        for (const makeProxy of proxies) {
+          try {
+            const proxyUrl = makeProxy(SUBSTACK_RSS_URL);
+            const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
+            if (!response.ok) continue;
+            xmlText = await response.text();
+            // Verify it's valid XML (starts with <?xml or <rss)
+            if (xmlText.includes("<rss") || xmlText.includes("<?xml")) {
+              break;
+            }
+            xmlText = "";
+          } catch {
+            continue;
+          }
+        }
+
+        if (!xmlText) {
+          throw new Error("Failed to fetch RSS from all proxies");
+        }
+
+        const items = parseRssXml(xmlText);
+
+        if (!items.length) {
+          throw new Error("No items found in RSS feed");
         }
 
         // Parse posts and fetch og:images for those without RSS images
-        const items = data.items; // Show all posts
         const parsedPosts: BlogPost[] = await Promise.all(
           items.map(async (item, index) => {
             let imageUrl = getImageUrl(item);
