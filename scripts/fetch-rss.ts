@@ -15,6 +15,12 @@ const RSS_URL = "https://opensession.substack.com/feed";
 const OUTPUT_DIR = join(process.cwd(), "public", "data");
 const OUTPUT_FILE = join(OUTPUT_DIR, "blogs.json");
 
+// Headers to avoid bot detection (Substack blocks requests without proper headers)
+const FETCH_HEADERS = {
+  "User-Agent": "Mozilla/5.0 (compatible; OpenSession/1.0; +https://opensession.co)",
+  "Accept": "application/rss+xml, application/xml, text/xml, */*",
+};
+
 interface BlogPost {
   id: string;
   title: string;
@@ -181,7 +187,10 @@ function parseRssXml(xmlText: string): BlogPost[] {
 
 async function fetchOgImage(postUrl: string): Promise<string | null> {
   try {
-    const response = await fetch(postUrl, { signal: AbortSignal.timeout(5000) });
+    const response = await fetch(postUrl, {
+      headers: FETCH_HEADERS,
+      signal: AbortSignal.timeout(5000),
+    });
     if (!response.ok) return null;
 
     const html = await response.text();
@@ -200,7 +209,7 @@ async function fetchOgImage(postUrl: string): Promise<string | null> {
 async function main() {
   console.log("Fetching RSS from Substack...");
 
-  const response = await fetch(RSS_URL);
+  const response = await fetch(RSS_URL, { headers: FETCH_HEADERS });
   if (!response.ok) {
     throw new Error(`Failed to fetch RSS: ${response.status} ${response.statusText}`);
   }
