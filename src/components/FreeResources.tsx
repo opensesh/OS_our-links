@@ -125,14 +125,14 @@ const resourceCards: ResourceCard[] = [
   // Page 3: Karimo (last)
   {
     id: "karimo",
-    badge: { text: "Coming Soon", variant: "coming-soon" },
+    badge: { text: "Live", variant: "live" },
     mediaDefault: "/OS_our-links/images/karimo-01.jpg",
     mediaType: "image",
     imageHover: "/OS_our-links/images/karimo-02.jpg",
     title: "KARIMO",
     description:
       "A framework and Claude Code plug-in for PRD-driven autonomous development. Think of it as plan mode on steroids.",
-    href: "#",
+    href: "https://github.com/opensesh/KARIMO",
     buttonLabel: "GitHub",
   },
 ];
